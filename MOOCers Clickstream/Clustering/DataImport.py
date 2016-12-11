@@ -7,10 +7,13 @@ csv_f = csv.reader(f)
 
 s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv', 'w', newline='')
 csv_session = csv.writer(s)
+session = ['user_id','NP','NB','NF']
+csv_session.writerow(session);
 
 #Getting N rows as the data set
 data = []
-for row in itertools.islice(csv_f,1,10000):
+#for row in itertools.islice(csv_f,1,10000):
+for row in csv_f:
     data.append(row)
 
 #reading the unique student ids into a list
@@ -22,22 +25,23 @@ for row in data:
 #for each student create activity sequence
 for student in student_ids:
     print(student);
-    activity_list =[]
+    activity_list = []
     for row in data:
-        if(row[13] == student):
+        if row[13] == student:
             activity_list.append(row)
     activity_list.sort(key=lambda tup: tup[10])
 
     #find the no of pauses NP
-    NP = sum(x[0]=='pause_video' for x in activity_list)
-    print("NP: ",NP);
+    NP = sum(x[0] == 'pause_video' for x in activity_list)
+    print("NP: ", NP);
 
-    #Median duration of pauses
     '''
+    #Median duration of pauses
     pause_duration = []
     for row in activity_list:
         if row[0] == 'pause_video':
     '''
+
     #no of forward seeks
     NB = sum(x[0]=='seek_video' and x[6]<x[7] for x in activity_list)
     NF = sum(x[0] == 'seek_video' and x[6] > x[7] for x in activity_list)
@@ -50,14 +54,14 @@ for student in student_ids:
     session.append(NB)
     session.append(NF)
     csv_session.writerow(session);
-    '''
+
     w = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+(student)+'.csv'
 
     with open(w, 'w', newline='') as mycsvfile:
         thedatawriter = csv.writer(mycsvfile)
         for row in activity_list:
             thedatawriter.writerow(row)
-    '''
+
 
 
 
