@@ -14,7 +14,7 @@ data = pd.DataFrame(df)
 #Create csv file to write data and add the headings
 s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv', 'w', newline='')
 csv_session = csv.writer(s)
-session = ['user_id', 'NP', 'NB', 'NF', 'MP', 'SR']
+session = ['user_id', 'NP', 'NB', 'NF', 'MP', 'SR', 'AS', 'ES']
 csv_session.writerow(session);
 
 #reading the unique student ids into a list
@@ -48,19 +48,12 @@ for student in student_ids:
     pause_detected = False
 
     #Median duration of pauses
-
     pause_duration = []
     for index, row in activity_list.iterrows():
         if row['event_type'] == 'play_video':
             play_val = row['time']
             if pause_detected:
-                #play_val = datetime.strptime(play_val, "%M:%S.%f")
-                #pause_val = datetime.strptime(pause_val, "%M:%S.%f")
                 time_diff = play_val - pause_val
-                if time_diff.total_seconds() < 0:
-                    print(student)
-                    print(play_val)
-                    print(pause_val)
                 pause_duration.append(time_diff.total_seconds())
                 pause_detected = False
         elif row['event_type'] == 'pause_video':
@@ -69,12 +62,27 @@ for student in student_ids:
 
     MP = np.median(pause_duration)
 
+    #Average video speed(AS) and Effective speed change(ES)
+    speed_change_list = activity_list.loc[(activity_list.event_type == 'speed_change_video')]
+    new_weights = speed_change_list.video_new_speed.unique()
+    old_weights = speed_change_list.video_old_speed.unique()
+    weights = list(set(list(set(new_weights)) + list(set(old_weights))))
+
+    if len(speed_change_list) > 0:
+        starting_speed = speed_change_list.iloc[0, 5]
+    else:
+        starting_speed = 1
+
+    if len(weights) > 0:
+        AS = np.mean(weights)
+    else:
+        AS = 1
+
+    ES = AS - starting_speed
+
     #proportion of skipped video content
-
     seek_forward_list = activity_list.loc[(activity_list.event_type == 'seek_video') & (activity_list.video_new_time > activity_list.video_old_time)]
-
     seek_forward_list['SR'] = seek_forward_list['video_new_time'] - seek_forward_list['video_old_time']
-
     SR = seek_forward_list['SR'].sum()
 
     #no of forward seeks and backward seeks
@@ -88,6 +96,8 @@ for student in student_ids:
     session.append(NF)
     session.append(MP)
     session.append(SR)
+    session.append(AS)
+    session.append(ES)
     csv_session.writerow(session)
 
     print((i/len(student_ids))*100)

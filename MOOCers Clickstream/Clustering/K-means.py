@@ -13,7 +13,7 @@ from sklearn.metrics import silhouette_samples, silhouette_score
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
 
 df = pd.read_csv(file, parse_dates=True)
-data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR'))
+data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'AS', 'ES'))
 
 original_length = len(data)
 
@@ -23,6 +23,8 @@ original_length = len(data)
 nan_positions = isnan(data['MP'])
 data[nan_positions] = 0
 
+nan_positions = isnan(data['AS'])
+data[nan_positions] = 1
 
 #normalizing the columns
 data_norm = (data - data.min()) / (data.max() - data.min())
@@ -60,24 +62,31 @@ bss = tss - wcss
 plt.plot(range(1, n), bss)
 plt.show()
 '''
-k_means = cluster.KMeans(n_clusters=2, random_state=10).fit(data_norm)
+
+
+k_means = cluster.KMeans(n_clusters=3, random_state=10).fit(data_norm)
 centroids = k_means.cluster_centers_
 cluster_labels = k_means.labels_
 
-i=0
-j=0
+i = 0
+j = 0
+k = 0
 for row in cluster_labels:
     if row == 0:
         i = i +1
     if row == 1:
         j = j +1
+    if row == 2:
+        k = k +1
 
 print("Cluster 0 :", i)
 print("Cluster 1 :", j)
+print("Cluster 2 :", k)
+
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-scatter = ax.scatter(data_norm['SR'], data_norm['NF'], c=cluster_labels)
+scatter = ax.scatter(data_norm['ES'], data_norm['AS'], c=cluster_labels)
 scatter = ax.scatter(centroids[:, 0], centroids[:, 1], c="Red", marker="x")
 ax.set_xlabel('NF')
 ax.set_ylabel('MP')
