@@ -1,63 +1,119 @@
 import numpy as np
+from datetime import datetime, date
 import csv
+import pandas as pd
+from operator import itemgetter
 import itertools
 Video_code = ['i4x-Engineering-CS101-video-z68']
-f = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+Video_code[0]+'.csv')
-csv_f = csv.reader(f)
+file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//sessionized_'+Video_code[0]+'.csv'
 
+#reading video interaction file for video
+df = pd.read_csv(file, parse_dates=True)
+data = pd.DataFrame(df)
+header = data.columns.values
+
+#Create csv file to write data and add the headings
 s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv', 'w', newline='')
 csv_session = csv.writer(s)
-
-#Getting N rows as the data set
-data = []
-for row in itertools.islice(csv_f,1,10000):
-    data.append(row)
+session = ['session_id','user_id', 'NP', 'NB', 'NF', 'MP', 'SR', 'AS', 'ES']
+csv_session.writerow(session);
 
 #reading the unique student ids into a list
-student_ids = []
-for row in data:
-    if row[13] not in student_ids:
-        student_ids.append(row[13])
+student_ids = data.anon_screen_name.unique()
 
+i = 0
+session_id = 0
 #for each student create activity sequence
 for student in student_ids:
-    print(student);
-    activity_list =[]
-    for row in data:
-        if(row[13] == student):
-            activity_list.append(row)
-    activity_list.sort(key=lambda tup: tup[10])
+    i = i + 1
 
-    #find the no of pauses NP
-    NP = sum(x[0]=='pause_video' for x in activity_list)
-    print("NP: ",NP);
+    activity_list = data[data.anon_screen_name == student]
+    activity_list['time'] = activity_list['time'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+    activity_list = activity_list.sort_values(by='time')
 
-    #Median duration of pauses
-    '''
-    pause_duration = []
-    for row in activity_list:
-        if row[0] == 'pause_video':
-    '''
-    #no of forward seeks
-    NB = sum(x[0]=='seek_video' and x[6]<x[7] for x in activity_list)
-    NF = sum(x[0] == 'seek_video' and x[6] > x[7] for x in activity_list)
-    print("NB: ",NB);
-    print("NF: ",NF);
+    session_ids = data.session_no.unique()
 
-    session = []
-    session.append(student)
-    session.append(NP)
-    session.append(NB)
-    session.append(NF)
-    csv_session.writerow(session);
+    for session in session_ids:
+        session_id += 1
+        session_activity_list = activity_list[activity_list.session_no == session]
+
+        # find the no of pauses - NP
+        NP = len(session_activity_list[session_activity_list.event_type == 'pause_video'])
+
+        # Median duration of pauses - MP
+        pause_val = 0
+        play_val = 0
+        pause_detected = False
+
+        pause_duration = []
+        for index, row in session_activity_list.iterrows():
+            if row['event_type'] == 'play_video':
+                play_val = row['time']
+                if pause_detected:
+                    time_diff = play_val - pause_val
+                    pause_duration.append(time_diff.total_seconds())
+                    pause_detected = False
+            elif row['event_type'] == 'pause_video':
+                pause_val = row['time']
+                pause_detected = True
+
+        MP = np.median(pause_duration)
+
+        # Average video speed(AS) and Effective speed change(ES)
+        speed_change_list = session_activity_list.loc[(session_activity_list.event_type == 'speed_change_video')]
+        new_weights = speed_change_list.video_new_speed.unique()
+        old_weights = speed_change_list.video_old_speed.unique()
+        weights = list(set(list(set(new_weights)) + list(set(old_weights))))
+
+        if len(speed_change_list) > 0:
+            starting_speed = speed_change_list.iloc[0, 5]
+        else:
+            starting_speed = 1
+
+        if len(weights) > 0:
+            AS = np.mean(weights)
+        else:
+            AS = 1
+
+        ES = AS - starting_speed
+
+        # proportion of skipped video content
+        seek_forward_list = session_activity_list.loc[(session_activity_list.event_type == 'seek_video') & (session_activity_list.video_new_time > session_activity_list.video_old_time)]
+        seek_forward_list['SR'] = seek_forward_list['video_new_time'] - seek_forward_list['video_old_time']
+        SR = seek_forward_list['SR'].sum()
+
+        # no of forward seeks and backward seeks
+        NB = len(session_activity_list[(session_activity_list.event_type == 'seek_video') & (session_activity_list.video_new_time < session_activity_list.video_old_time)])
+        NF = len(session_activity_list[(session_activity_list.event_type == 'seek_video') & (session_activity_list.video_new_time > session_activity_list.video_old_time)])
+
+        session = []
+        session.append(session_id)
+        session.append(student)
+        session.append(NP)
+        session.append(NB)
+        session.append(NF)
+        session.append(MP)
+        session.append(SR)
+        session.append(AS)
+        session.append(ES)
+        csv_session.writerow(session)
+
+
+    print(round((i/len(student_ids))*100, 2),"% completed")
+
     '''
     w = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+(student)+'.csv'
 
     with open(w, 'w', newline='') as mycsvfile:
         thedatawriter = csv.writer(mycsvfile)
-        for row in activity_list:
+        thedatawriter.writerow(header)
+        for index, row in activity_list.iterrows():
             thedatawriter.writerow(row)
     '''
+
+
+
+
 
 
 

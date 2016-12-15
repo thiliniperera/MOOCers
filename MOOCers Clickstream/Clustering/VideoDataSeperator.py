@@ -8,6 +8,8 @@ Video_code = ['i4x-Engineering-CS101-video-z68']
 Video = []
 
 for row in csv_f:
+    if row[0] == 'event_type':
+        Video.append(row)
     if row[14] in Video_code:
         Video.append(row)
 
