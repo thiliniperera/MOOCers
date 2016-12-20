@@ -1,7 +1,7 @@
 import numpy as np
 import csv as csv
 import pandas as pd
-import sklearn as sk
+from sklearn import svm
 import urllib2
 import matplotlib as plt
 from itertools import islice
@@ -26,10 +26,11 @@ quiz_count_array = []
 grade_array = []
 training_set = []
 test_set= []
+unfiltered = []
 # reading clickstream file
 with open(eventDataLocation, 'rt') as f:
    reader = csv.reader(f, delimiter=',')
-   for row in islice(reader,30000, 30100):
+   for row in islice(reader,20000,21000):
        events.append(row)
 
 ##reading final grade file
@@ -38,11 +39,17 @@ finalGradeData = csv.reader(open(finalGradeLocation), delimiter=',');
 #    print reader.next()
 for row in finalGradeData:
     finalGrade.append(row)
-print len(finalGrade)
+#print len(finalGrade)
 ##finding number of users
 for row in events:
-    if row[0] not in student_id:
-        student_id.append(row[0])
+    if row[0] not in unfiltered:
+        unfiltered.append(row)
+
+for row in unfiltered:
+    for row2 in finalGrade:
+        if row2[0] not in student_id and row2[0] in row[0]:
+            student_id.append(row[0])
+            break
 #
 # for row_1 in student_id:
 #     for row_2 in finalGrade:
@@ -55,6 +62,12 @@ for row_1 in student_id:
     temp_count = 0
     video_count = 0
     quiz_count = 0
+    check = False
+    for row_3 in finalGrade:
+        if row_1 in row_3[0]:
+            countfin+=1
+            grade_array.append(row_3[-2])
+            break
     for row_2 in events:
         if row_1 in row_2[0]:
             temp_count += 1
@@ -64,15 +77,6 @@ for row_1 in student_id:
             if row_2[1] in 'problem_check':
                 quiz_count+=1
                 quiz.append(row_2[6])
-                #    if temp_count > 100:
-                #        considering_users.append(row_1)
-                #    if quiz_count > 0:
-                #        print quiz_count
-    for row_3 in finalGrade:
-        if row_1 in row_3[0]:
-            countfin+=1
-            grade_array.append(row_3[-2])
-            break
     quiz_count_array.append(quiz_count)
     video_count_array.append(video_count)
     event_count.append(temp_count)
@@ -88,15 +92,20 @@ print (len(quiz_array))
 print (len(video_array))
 print (len(event_array))
 print len(finalGrade_array)
-print countfin
-finalArray = np.stack((quiz_array, video_array, event_array))
+finalArray = np.stack((std_array,quiz_array, video_array, event_array,finalGrade_array)).T
 
-#print(len(finalArray))
+thefile = open('finalArray.csv','w')
+for item in finalArray:
+    thefile.write("%s\n" %item)
+
+print(len(finalArray))
+
+
 # training_set = finalArray
 #
-# clf = sk.svm.LinearSVC()
-# clf.fit(finalArray[:3],finalArray[3])
-#clf.predict(final_test_array[:3],final_test_array[3])
+# clf = svm.SVC()
+# clf.fit(finalArray[:40][1:4],finalArray[:40][4])
+# clf.predict(finalArray[40:70][1:4])
 # finding number of problems
 #for row in events:
   #  print row[1]
