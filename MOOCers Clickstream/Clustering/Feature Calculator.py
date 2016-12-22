@@ -4,25 +4,21 @@ import csv
 import pandas as pd
 from operator import itemgetter
 import itertools
-Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
+#Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
+Video_code = ['i4x-Engineering-CS101-video-z68']
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//sessionized_'+Video_code[0]+'.csv'
 
 start_time = datetime.now()
-
 
 # reading video interaction file for video
 df = pd.read_csv(file, parse_dates=True)
 data = pd.DataFrame(df)
 header = data.columns.values
 
-
-
-
-
 # Create csv file to write data and add the headings
 s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv', 'w', newline='')
 csv_session = csv.writer(s)
-session = ['session_id', 'user_id', 'NP', 'NB', 'NF', 'MP', 'SR','RL', 'AS', 'ES', 'session_no']
+session = ['session_id', 'user_id', 'NP', 'NB', 'NF', 'MP', 'SR','RL', 'AS', 'ES','TP', 'session_no']
 csv_session.writerow(session);
 
 # reading the unique student ids into a list
@@ -47,9 +43,6 @@ for student in student_ids:
         session_id += 1
 
         session_activity_list = activity_list[activity_list.session_no == session]
-        #session_activity_list = session_activity_list.sort_values('time')
-
-        #Removing sessions with very little play time
         playhead_positions = session_activity_list['video_current_time']
         temp_list = list(filter('None'.__ne__, playhead_positions))  # Removing None values
         cleaned_temp_list = [x for x in temp_list if str(x) != 'nan']  # Removing nan values
@@ -60,11 +53,7 @@ for student in student_ids:
             min_length = float(min(cleaned_temp_list))
             total_play_time = max_length - min_length
 
-            #print(cleaned_temp_list)
-
-            #print(max_length,min_length,total_play_time)
-
-            if total_play_time < (60*1): # Remove sessions which lasted less than 1 minute
+            if total_play_time < 100: # Remove sessions which lasted less than 100 seconds
                 no_of_removed_sessions += 1
                 continue
         else:
@@ -139,6 +128,7 @@ for student in student_ids:
         session_list.append(RL)
         session_list.append(AS)
         session_list.append(ES)
+        session_list.append(total_play_time)
         session_list.append(session)
         csv_session.writerow(session_list)
 
@@ -160,7 +150,7 @@ print("Total no of sessions: ", session_id)
 print("Total no of removed sessions: ", no_of_removed_sessions, " (", round((no_of_removed_sessions/session_id)*100, 2), "% of sessions removed)")
 
 end_time = datetime.now()
-print("Running time : ", end_time -start_time)
+print("Running time : ", end_time - start_time)
 
 
 
