@@ -11,7 +11,7 @@ for i in range(0,len(df.columns.values)):
     df.columns.values[i] = df.columns.values[i].replace("'", "")
 
 #Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
-Video_code = Configurations.Video_code[0]
+Video_code = Configurations.Video_code
 Video = df[df['video_id'] == Video_code[0]]
 
 print("Writing csv......")
