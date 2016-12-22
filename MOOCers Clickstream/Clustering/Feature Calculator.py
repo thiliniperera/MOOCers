@@ -1,12 +1,11 @@
 import numpy as np
-from datetime import datetime, date
+from datetime import datetime
 import csv
 import pandas as pd
-from operator import itemgetter
-import itertools
+
 #Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
-Video_code = ['i4x-Engineering-CS101-video-z68']
-file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//sessionized_'+Video_code[0]+'.csv'
+Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
+file = 'videos/sessionized_'+Video_code[0]+'.csv'
 
 start_time = datetime.now()
 
@@ -16,7 +15,7 @@ data = pd.DataFrame(df)
 header = data.columns.values
 
 # Create csv file to write data and add the headings
-s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv', 'w', newline='')
+s = open('sessions/session_'+Video_code[0]+'.csv', 'w', newline='')
 csv_session = csv.writer(s)
 session = ['session_id', 'user_id', 'NP', 'NB', 'NF', 'MP', 'SR','RL', 'AS', 'ES','TP', 'session_no']
 csv_session.writerow(session);

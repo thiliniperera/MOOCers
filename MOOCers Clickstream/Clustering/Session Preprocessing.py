@@ -1,9 +1,8 @@
 import pandas as pd
 from numpy import *
 import matplotlib.pyplot as plt
-
-
-file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
+Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
+file = 'sessions/session_'+Video_code[0]+'.csv'
 
 df = pd.read_csv(file, parse_dates=True)
 data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES', 'TP', 'session_no'))
@@ -16,7 +15,7 @@ data = data[data.TP >100]
 print(data.describe())
 plt.figure()
 data.hist()
-#plt.show()
+plt.show()
 
-s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//preprocessed_session.csv', 'w', newline='')
+s = open('preprocessed_session'+Video_code[0]+'.csv', 'w', newline='')
 data.to_csv(s, index=False)

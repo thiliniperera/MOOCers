@@ -9,7 +9,8 @@ from sklearn import cluster
 from scipy.spatial.distance import cdist, pdist
 from sklearn.metrics import silhouette_samples, silhouette_score
 
-file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//preprocessed_session.csv'
+Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
+file = 'preprocessed_session'+Video_code[0]+'.csv'
 
 df = pd.read_csv(file, parse_dates=True)
 data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES', 'session_no'))
@@ -53,7 +54,7 @@ ax.plot(range_n_clusters, silhouette_avg_list)
 plt.show()
 '''
 
-
+'''
 #elbow method
 n = 15
 kMeansVar = [cluster.KMeans(n_clusters=k).fit(data_norm) for k in range(1, n)]
@@ -65,7 +66,7 @@ tss = sum(pdist(data_norm)**2)/data_norm.shape[0]
 bss = tss - wcss
 plt.plot(range(1, n), bss)
 plt.show()
-
+'''
 
 
 k_means = cluster.KMeans(n_clusters=6, random_state=10).fit(data_norm)
@@ -73,24 +74,9 @@ centroids = k_means.cluster_centers_
 cluster_labels = k_means.labels_
 data_norm['session_no'] = data['session_no']
 
-s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//results.csv', 'w', newline='')
+s = open('results/'+Video_code[0]+'_results.csv', 'w', newline='')
 data_norm['cluster_label'] = k_means.labels_
 data_norm.to_csv(s, index=False)
-
-i = 0
-j = 0
-k = 0
-for row in cluster_labels:
-    if row == 0:
-        i = i +1
-    if row == 1:
-        j = j +1
-    if row == 2:
-        k = k +1
-
-print("Cluster 0 :", i)
-print("Cluster 1 :", j)
-print("Cluster 2 :", k)
 
 
 fig = plt.figure()

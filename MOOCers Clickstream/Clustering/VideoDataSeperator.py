@@ -6,10 +6,9 @@ f = open('C://Users//Kushan//Documents//Data//Data//Engineering_CS101_Summer2014
 df = pd.read_csv(f, parse_dates=True, dtype={'video_old_speed': np.float64, 'video_new_speed': np.float64})
 
 #Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
-Video_code = ['i4x-Engineering-CS101-video-z68']
+Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
 Video = df[df.video_id == Video_code[0]]
 
 print("Writing csv......")
-w = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+(Video_code[0])+'.csv'
-
+w = ('videos/'+Video_code[0])+'.csv'
 Video.to_csv(w, index=False)

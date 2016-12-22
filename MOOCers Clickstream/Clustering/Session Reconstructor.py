@@ -5,8 +5,8 @@ import numpy as np
 from operator import attrgetter
 
 #Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
-Video_code = ['i4x-Engineering-CS101-video-z68']
-file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+Video_code[0]+'.csv'
+Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
+file = 'videos/'+Video_code[0]+'.csv'
 
 #reading video interaction file for video
 df = pd.read_csv(file, parse_dates=True)
@@ -15,14 +15,12 @@ data['session_no'] = 1
 header = list(data.columns.values)
 
 #Create csv file to write data and add the headings
-s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//sessionized_'+Video_code[0]+'.csv', 'w', newline='')
+s = open('videos/sessionized_'+Video_code[0]+'.csv', 'w', newline='')
 csv_session = csv.writer(s)
 csv_session.writerow(header)
 
 format = '%d-%m-%Y %I:%M:%S %p'
-
 student_ids = data.anon_screen_name.unique()
-ab =0
 
 j = 0
 activity_list = []
