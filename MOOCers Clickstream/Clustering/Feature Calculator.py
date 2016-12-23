@@ -137,7 +137,7 @@ for student in student_ids:
         csv_session.writerow(session_list)
 
 
-    print(round((iterator / len(student_ids)) * 100, 2), "% completed")
+    # print(round((iterator / len(student_ids)) * 100, 2), "% completed")
 
     '''
         w = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+(student)+'.csv'
