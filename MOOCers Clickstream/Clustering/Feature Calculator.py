@@ -2,9 +2,10 @@ import numpy as np
 from datetime import datetime
 import csv
 import pandas as pd
+from settings import Configurations
 
 #Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
-Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
+Video_code = Configurations.Video_code
 file = 'videos/sessionized_'+Video_code[0]+'.csv'
 
 start_time = datetime.now()
@@ -15,7 +16,7 @@ data = pd.DataFrame(df)
 header = data.columns.values
 
 # Create csv file to write data and add the headings
-s = open('sessions/session_'+Video_code[0]+'.csv', 'w', newline='')
+s = open('sessions/session_'+Video_code[0]+'.csv', 'w')
 csv_session = csv.writer(s)
 session = ['session_id', 'user_id', 'NP', 'NB', 'NF', 'MP', 'SR','RL', 'AS', 'ES','TP', 'session_no']
 csv_session.writerow(session);
@@ -23,17 +24,21 @@ csv_session.writerow(session);
 # reading the unique student ids into a list
 student_ids = data.anon_screen_name.unique()
 
-i = 0
+
+
+
 session_id = 0
+iterator = int('0')
+
+#print iterator.dtypes
 no_of_removed_sessions = 0
 # for each student create activity sequence
 print("Total no of students: ",len(student_ids))
 for student in student_ids:
-    i += 1
+    iterator = (iterator + 1)
 
     activity_list = data[data.anon_screen_name == student]
-    activity_list['time'] = activity_list['time'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
-
+    activity_list['time'] = pd.to_datetime(activity_list['time'],format ='%Y-%m-%d %H:%M:%S')
     session_ids = data.session_no.unique()
     video_start_val = 0
     video_end_val = 0
@@ -47,7 +52,7 @@ for student in student_ids:
         cleaned_temp_list = [x for x in temp_list if str(x) != 'nan']  # Removing nan values
 
         if len(cleaned_temp_list) > 0:
-            cleaned_temp_list = [float(i) for i in cleaned_temp_list]
+            cleaned_temp_list = [float(xy) for xy in cleaned_temp_list]
             max_length = float(max(cleaned_temp_list))
             min_length = float(min(cleaned_temp_list))
             total_play_time = max_length - min_length
@@ -132,7 +137,7 @@ for student in student_ids:
         csv_session.writerow(session_list)
 
 
-    print(round((i/len(student_ids))*100, 2), "% completed")
+    print(round((iterator / len(student_ids)) * 100, 2), "% completed")
 
     '''
         w = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+(student)+'.csv'

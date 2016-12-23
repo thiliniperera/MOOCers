@@ -3,9 +3,10 @@ import pandas as pd
 import csv
 import numpy as np
 from operator import attrgetter
+from settings import Configurations
 
 #Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
-Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
+Video_code = Configurations.Video_code
 file = 'videos/'+Video_code[0]+'.csv'
 
 #reading video interaction file for video
@@ -15,16 +16,19 @@ data['session_no'] = 1
 header = list(data.columns.values)
 
 #Create csv file to write data and add the headings
-s = open('videos/sessionized_'+Video_code[0]+'.csv', 'w', newline='')
+s = open('videos/sessionized_'+Video_code[0]+'.csv', 'w')
 csv_session = csv.writer(s)
 csv_session.writerow(header)
 
-format = '%d-%m-%Y %I:%M:%S %p'
+format = '%Y-%m-%d %H:%M:%S.%f'
+# print(len(data))
+# exit()
 student_ids = data.anon_screen_name.unique()
 
 j = 0
 activity_list = []
 #for each student create activity sequence
+#print  len(student_ids)
 for student in student_ids:
     j += 1
     activity_list = data[data.anon_screen_name == student]
@@ -51,7 +55,7 @@ for student in student_ids:
     activity_list['time'] = activity_list['time'].apply(lambda v: str(v))
     activity_list.to_csv(s, header=False, index=False)
 
-    print(round((j / len(student_ids)) * 100, 2), "% completed")
+    #print round((j / len(student_ids)) * 100, 2), "% completed"
 
 
 
