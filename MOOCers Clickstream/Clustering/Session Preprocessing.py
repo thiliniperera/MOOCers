@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from settings import Configurations
 
 #preprocess NB,NP,NF, mP
-def preprocess(data,S):
-    bin_size = 30
+def preprocess(data,S,bin):
+    bin_size = bin
     df = pd.DataFrame()
     res = pd.cut(data[S],bin_size)
     count = pd.value_counts(res)
@@ -40,6 +40,17 @@ def preprocessAS(data,Att):
        data = data[(data[Att] <=2.0) & (data[Att] >= 0.5)]
        return data
 
+def preprocessES(data,Att):
+    max = data[Att].max()
+    min = data[Att].min()
+
+    if max <= 1.5 and min >= -1.5:
+        print "No outliers"
+        return data
+    else:
+       data = data[(data[Att] <=1.5) & (data[Att] >= -1.5)]
+       return data
+    
 fileLocation = 'session.csv'
 
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
@@ -60,16 +71,21 @@ print(data.describe())
 plt.figure()
 data.hist()
 print "NP"
-
-data = preprocess(data,'NP')
+data = preprocess(data,'NP',30)
 print "NF"
-data=preprocess(data,'NF')
+data=preprocess(data,'NF',30)
 print "NB"
-data=preprocess(data,'NB')
+data=preprocess(data,'NB',30)
 print "MP"
-data=preprocess(data,'MP')
+data=preprocess(data,'MP',30)
 print "AS"
 data = preprocessAS(data,'AS')
+print "SR"
+data = preprocess(data,'SR',100)
+print "RL"
+data = preprocess(data,'RL',50)
+print "ES"
+data = preprocessES(data,'ES')
 print data.describe()
 
 #plt.show()
