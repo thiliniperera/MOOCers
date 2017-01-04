@@ -1,11 +1,8 @@
 from datetime import datetime
 import pandas as pd
 import csv
-import numpy as np
-from operator import attrgetter
 from settings import Configurations
 
-#Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
 Video_code = Configurations.Video_code
 file = 'videos/'+Video_code[0]+'.csv'
 
@@ -55,7 +52,7 @@ for student in student_ids:
     activity_list['time'] = activity_list['time'].apply(lambda v: str(v))
     activity_list.to_csv(s, header=False, index=False)
 
-    #print round((j / len(student_ids)) * 100, 2), "% completed"
+    print round((j / len(student_ids)) * 100, 2), "% completed"
 
 
 
