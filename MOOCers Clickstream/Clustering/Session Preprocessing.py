@@ -5,37 +5,40 @@ from settings import Configurations
 
 #preprocess NB,NP,NF, mP
 def preprocess(data,S):
-
+    bin_size = 30
     df = pd.DataFrame()
-    df2 = pd.DataFrame()
-    res = pd.cut(data[S],30)
-    data['result'] = pd.cut(data[S],30)
+    res = pd.cut(data[S],bin_size)
     count = pd.value_counts(res)
     df['count'] = count.reindex(res.cat.categories)
     count = count.reindex(res.cat.categories)
-    #print df['count']
+
     i=0;
+    zero_count =0;
     for index,x in df.iterrows():
         if x['count'] == 0:
-            print "0 index", i
+            zero_count+=1
+            if(zero_count > (float (bin_size)/10)):
+                start_value = float(index[index.index("(")+1:index.index(",")])
+                end_value = float(index[index.index(",")+1:index.index("]")])
+                data = data[data[S]<end_value]
+                return data
+                break
         else:
-            print x['count']
+            zero_count =0
         i+=1
-    return
+    return data
 
 #preprocess speed rate
-def preprocessAS(data):
-    max = data.max()
-    min = data.min()
-    df = pd.DataFrame({'Data':data})
+def preprocessAS(data,Att):
+    max = data[Att].max()
+    min = data[Att].min()
 
-    if max <= 1.75 and min >= 0.75:
+    if max <= 2.0 and min >= 0.5:
         print "No outliers"
-        return
+        return data
     else:
-       data = data[(data <=1.75) & (data >= 0.75)]
-       print data.describe()
-    #print data
+       data = data[(data[Att] <=2.0) & (data[Att] >= 0.5)]
+       return data
 
 fileLocation = 'session.csv'
 
@@ -52,22 +55,24 @@ file = 'sessions/session_'+Video_code[0]+'.csv'
 
 nan_positions = isnan(data['MP'])
 data[nan_positions] = 0
-#data = data[(data.NP != 100) & (data.NB <= 40) & (data.NF <= 40)] # Removing outliers
 data = data[data.TP > 100]
-data = data[data.TP < 2000]
 print(data.describe())
 plt.figure()
 data.hist()
 print "NP"
-preprocess(data,'NP')
+
+data = preprocess(data,'NP')
+print "NF"
+data=preprocess(data,'NF')
 print "NB"
-preprocess(data,'NB')
-print "TP"
-preprocess(data,'TP')
+data=preprocess(data,'NB')
+print "MP"
+data=preprocess(data,'MP')
 print "AS"
-preprocessAS(data['AS'])
-#preprocess(data,'ES')
-plt.show()
+data = preprocessAS(data,'AS')
+print data.describe()
+
+#plt.show()
 wrtLocation = open('preprocessed_session.csv','w')
 #s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//preprocessed_session.csv', 'w', newline='')
 
