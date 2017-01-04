@@ -109,6 +109,7 @@ thefile = open('finalArray.csv','w')
 for item in finalArray:
     thefile.write("%s\n" %item)
 
+
 # print(len(finalArray))
 #
 #
