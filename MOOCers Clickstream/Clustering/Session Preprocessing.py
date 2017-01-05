@@ -62,10 +62,8 @@ def preprocessTP(data,Att):
     max_index =  df['count'][df['count'] == max].index.tolist()[0]
     end_value_max_bin = float(max_index[max_index.index(",")+1:max_index.index("]")])
     if(end_value_max_bin < data[Att].max()):
+        print ""
 
-    df2 = data[Att]>end_value
-    print df2
-    exit()
 fileLocation = 'session.csv'
 
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
