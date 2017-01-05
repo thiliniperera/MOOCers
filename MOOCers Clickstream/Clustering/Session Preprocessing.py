@@ -10,7 +10,6 @@ def preprocess(data,S,bin):
     res = pd.cut(data[S],bin_size)
     count = pd.value_counts(res)
     df['count'] = count.reindex(res.cat.categories)
-    count = count.reindex(res.cat.categories)
 
     i=0;
     zero_count =0;
@@ -18,7 +17,6 @@ def preprocess(data,S,bin):
         if x['count'] == 0:
             zero_count+=1
             if(zero_count > (float (bin_size)/10)):
-                start_value = float(index[index.index("(")+1:index.index(",")])
                 end_value = float(index[index.index(",")+1:index.index("]")])
                 data = data[data[S]<end_value]
                 return data
@@ -51,21 +49,37 @@ def preprocessES(data,Att):
        data = data[(data[Att] <=1.5) & (data[Att] >= -1.5)]
        return data
 
-def preprocessTP(data,Att):
+def preprocessTP(data,Att,bin):
     bin_size = 100
     df = pd.DataFrame()
     res = pd.cut(data[Att], bin_size)
     count = pd.value_counts(res)
-    df['count'] = count#count.reindex(res.cat.categories)
-    #count = count.reindex(res.cat.categories)
-    max = df['count'].max()
-    max_index =  df['count'][df['count'] == max].index.tolist()[0]
-    end_value_max_bin = float(max_index[max_index.index(",")+1:max_index.index("]")])
-    if(end_value_max_bin < data[Att].max()):
+    df['count'] = count.reindex(res.cat.categories)   # reorganize according to bins
+    max = df['count'].max()                            #max count
+    max_index =  df['count'][df['count'] == max].index.tolist()[0]   #margin values of max bin
+    end_value_max_bin = float(max_index[max_index.index(",")+1:max_index.index("]")])  #right margin
 
-    df2 = data[Att]>end_value
-    print df2
-    exit()
+    check = False   #to check if reach max bin
+    j=0
+    z_count =0
+    if(end_value_max_bin < data[Att].max()):
+        for index, x in df.iterrows():
+            if x['count'] == max:
+                check = True    #when reach to max
+            if check == True:   #indicates the reaching to max
+                if x['count'] == 0:
+                    z_count += 1
+                    if (z_count > (float(bin_size) / 10)):
+                        end_value = float(index[index.index(",") + 1:index.index("]")])
+                        data = data[data[Att] < end_value]
+                        return data
+                        break
+                else:
+                    z_count = 0
+                j += 1
+    else:
+        return data
+
 fileLocation = 'session.csv'
 
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
@@ -85,23 +99,23 @@ data = data[data.TP > 100]
 print(data.describe())
 plt.figure()
 data.hist()
-print "NP"
-data = preprocess(data,'NP',30)
-print "NF"
-data=preprocess(data,'NF',30)
-print "NB"
-data=preprocess(data,'NB',30)
-print "MP"
-data=preprocess(data,'MP',30)
-print "AS"
-data = preprocessAS(data,'AS')
-print "SR"
-data = preprocess(data,'SR',100)
-print "RL"
-data = preprocess(data,'RL',50)
-print "ES"
-data = preprocessES(data,'ES')
-# preprocessTP(data,'TP')
+# print "NP"
+# data = preprocess(data,'NP',30)
+# print "NF"
+# data=preprocess(data,'NF',30)
+# print "NB"
+# data=preprocess(data,'NB',30)
+# print "MP"
+# data=preprocess(data,'MP',30)
+# print "AS"
+# data = preprocessAS(data,'AS')
+# print "SR"
+# data = preprocess(data,'SR',100)
+# print "RL"
+# data = preprocess(data,'RL',50)
+# print "ES"
+# data = preprocessES(data,'ES')
+preprocessTP(data,'TP',100)
 print data.describe()
 
 #plt.show()
