@@ -8,21 +8,22 @@ import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
+from settings import Configurations
 
-Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
-file = 'preprocessed_session'+Video_code[0]+'.csv'
+Video_code = Configurations.Video_code
+file = 'sessions/preprocessed_session'+Video_code[0]+'.csv'
 
 df = pd.read_csv(file, parse_dates=True)
-data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES','TP','session_no'))
+data = pd.DataFrame(df, columns=('user_id','NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES','TP','session_no'))
 
+user_ids = data['user_id']
+data = data.drop('user_id', 1)
 
 nan_positions = isnan(data['MP'])
 data[nan_positions] = 0
 
 #normalizing the columns
 data_norm= (data-data.min()) / (data.max()-data.min())
-
-print(data_norm)
 
 # distance matrix
 D = pairwise_distances(data_norm, metric='euclidean')
@@ -40,12 +41,13 @@ cluster_labels = [float(item) for item in clusters]
 fig = plt.figure()
 ax = fig.add_subplot(111)
 scatter = ax.scatter(data_norm['MP'], data_norm['TP'], c=cluster_labels)
-ax.set_xlabel('MP')
+ax.set_xlabel('NB')
 ax.set_ylabel('TP')
 plt.show()
 
 s = open('results/'+Video_code[0]+'_kmedoid_results.csv', 'w')
 data_norm['cluster_label'] = clusters
+data_norm['user_id'] = user_ids
 data_norm.to_csv(s, index=False)
 
 
