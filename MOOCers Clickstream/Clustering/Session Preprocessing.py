@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from settings import Configurations
 
 #preprocess NB,NP,NF, mP
-def preprocess(data,S):
-    bin_size = 30
+def preprocess(data,S,bin):
+    bin_size = bin
     df = pd.DataFrame()
     res = pd.cut(data[S],bin_size)
     count = pd.value_counts(res)
@@ -40,6 +40,32 @@ def preprocessAS(data,Att):
        data = data[(data[Att] <=2.0) & (data[Att] >= 0.5)]
        return data
 
+def preprocessES(data,Att):
+    max = data[Att].max()
+    min = data[Att].min()
+
+    if max <= 1.5 and min >= -1.5:
+        print "No outliers"
+        return data
+    else:
+       data = data[(data[Att] <=1.5) & (data[Att] >= -1.5)]
+       return data
+
+def preprocessTP(data,Att):
+    bin_size = 100
+    df = pd.DataFrame()
+    res = pd.cut(data[Att], bin_size)
+    count = pd.value_counts(res)
+    df['count'] = count#count.reindex(res.cat.categories)
+    #count = count.reindex(res.cat.categories)
+    max = df['count'].max()
+    max_index =  df['count'][df['count'] == max].index.tolist()[0]
+    end_value_max_bin = float(max_index[max_index.index(",")+1:max_index.index("]")])
+    if(end_value_max_bin < data[Att].max()):
+
+    df2 = data[Att]>end_value
+    print df2
+    exit()
 fileLocation = 'session.csv'
 
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
@@ -60,16 +86,22 @@ print(data.describe())
 plt.figure()
 data.hist()
 print "NP"
-
-data = preprocess(data,'NP')
+data = preprocess(data,'NP',30)
 print "NF"
-data=preprocess(data,'NF')
+data=preprocess(data,'NF',30)
 print "NB"
-data=preprocess(data,'NB')
+data=preprocess(data,'NB',30)
 print "MP"
-data=preprocess(data,'MP')
+data=preprocess(data,'MP',30)
 print "AS"
 data = preprocessAS(data,'AS')
+print "SR"
+data = preprocess(data,'SR',100)
+print "RL"
+data = preprocess(data,'RL',50)
+print "ES"
+data = preprocessES(data,'ES')
+# preprocessTP(data,'TP')
 print data.describe()
 
 #plt.show()
