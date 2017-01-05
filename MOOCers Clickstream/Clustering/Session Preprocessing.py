@@ -50,7 +50,22 @@ def preprocessES(data,Att):
     else:
        data = data[(data[Att] <=1.5) & (data[Att] >= -1.5)]
        return data
-    
+
+def preprocessTP(data,Att):
+    bin_size = 100
+    df = pd.DataFrame()
+    res = pd.cut(data[Att], bin_size)
+    count = pd.value_counts(res)
+    df['count'] = count#count.reindex(res.cat.categories)
+    #count = count.reindex(res.cat.categories)
+    max = df['count'].max()
+    max_index =  df['count'][df['count'] == max].index.tolist()[0]
+    end_value_max_bin = float(max_index[max_index.index(",")+1:max_index.index("]")])
+    if(end_value_max_bin < data[Att].max()):
+
+    df2 = data[Att]>end_value
+    print df2
+    exit()
 fileLocation = 'session.csv'
 
 file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
@@ -86,6 +101,7 @@ print "RL"
 data = preprocess(data,'RL',50)
 print "ES"
 data = preprocessES(data,'ES')
+# preprocessTP(data,'TP')
 print data.describe()
 
 #plt.show()
