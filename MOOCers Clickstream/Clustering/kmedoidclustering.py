@@ -2,7 +2,7 @@ from numpy import *
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
-from kmedoid import kMedoids
+from kmedoid import KMedoids
 from sklearn import metrics
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
@@ -19,44 +19,37 @@ data = pd.DataFrame(df, columns=('user_id','NP', 'NB', 'NF', 'MP', 'SR', 'RL', '
 user_ids = data['user_id']
 data = data.drop('user_id', 1)
 
-nan_positions = isnan(data['MP'])
-data[nan_positions] = 0
-
 #normalizing the columns
 data_norm= (data-data.min()) / (data.max()-data.min())
 
 #correlation
-print(data_norm.corr(method='pearson', min_periods=10))
+#data_norm.corr(method='pearson', min_periods=10))
 
 # distance matrix
 D = pairwise_distances(data_norm, metric='euclidean')
 
 # split into  clusters
-M, C = kMedoids(D, 5)
-centroids = pd.DataFrame()
+k_means = KMedoids(n_clusters=5, random_state=10).fit(data_norm)
 
-for point in M:
-    centroids = centroids.append(data_norm.iloc[point])
+centroids = k_means.cluster_centers_
+cluster_labels = k_means.labels_
 
-print(centroids)
+list = []
+for point in centroids:
+   list.append(point)
 
-clusters = [None] * len(data_norm)
-for label in C:
-    for point_idx in C[label]:
-        clusters[point_idx] = label
-
-
-cluster_labels = [float(item) for item in clusters]
+center_points = pd.DataFrame(list,columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES','TP','session_no'))
+print(center_points)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-scatter = ax.scatter(data_norm['TP'], data_norm['MP'], c=cluster_labels)
-scatter = ax.scatter(centroids['TP'], centroids['MP'], c="Red", marker="x",s=100)
-ax.set_xlabel('TP')
-ax.set_ylabel('MP')
+scatter = ax.scatter(data_norm['MP'], data_norm['TP'], c=cluster_labels)
+scatter = ax.scatter(centroids[:, 3], centroids[:, 8], c="Red", marker="x", s=100)
+ax.set_xlabel('MP')
+ax.set_ylabel('TP')
 plt.show()
 
-data_norm['cluster_label'] = clusters
+data_norm['cluster_label'] = cluster_labels
 data_norm['user_id'] = user_ids
 
 s = open('results/'+Video_code[0]+'_kmedoid_results.csv', 'w')
