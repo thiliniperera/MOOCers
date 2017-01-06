@@ -55,7 +55,7 @@ def preprocessTP(data,Att,bin):
     res = pd.cut(data[Att], bin_size)
     count = pd.value_counts(res)
     df['count'] = count.reindex(res.cat.categories)   # reorganize according to bins
-    max = df['count'].max()                            #max count
+    max = df['count'].max()                           #max count
     max_index =  df['count'][df['count'] == max].index.tolist()[0]   #margin values of max bin
     end_value_max_bin = float(max_index[max_index.index(",")+1:max_index.index("]")])  #right margin
 
@@ -80,18 +80,11 @@ def preprocessTP(data,Att,bin):
     else:
         return data
 
-fileLocation = 'session.csv'
 
-file = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//session.csv'
-df = pd.read_csv(fileLocation, parse_dates=True)
-
-data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES', 'TP', 'session_no'))
 Video_code = Configurations.Video_code
-
 file = 'sessions/session_'+Video_code[0]+'.csv'
-#
-# df = pd.read_csv(file, parse_dates=True)
-# data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'AS','RL','TP', 'ES', 'session_no'))
+df = pd.read_csv(file, parse_dates=True)
+data = pd.DataFrame(df, columns=('user_id','NP', 'NB', 'NF', 'MP', 'SR', 'AS', 'RL', 'TP', 'ES', 'session_no'))
 
 nan_positions = isnan(data['MP'])
 data[nan_positions] = 0
@@ -99,33 +92,28 @@ data = data[data.TP > 100]
 print(data.describe())
 plt.figure()
 data.hist()
-# print "NP"
-# data = preprocess(data,'NP',30)
-# print "NF"
-# data=preprocess(data,'NF',30)
-# print "NB"
-# data=preprocess(data,'NB',30)
-# print "MP"
-# data=preprocess(data,'MP',30)
-# print "AS"
-# data = preprocessAS(data,'AS')
-# print "SR"
-# data = preprocess(data,'SR',100)
-# print "RL"
-# data = preprocess(data,'RL',50)
-# print "ES"
-# data = preprocessES(data,'ES')
-preprocessTP(data,'TP',100)
-print data.describe()
-
-#plt.show()
-wrtLocation = open('preprocessed_session.csv','w')
-#s = open('C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Sessions//preprocessed_session.csv', 'w', newline='')
-
-data.to_csv(wrtLocation, index=False)
-data['TP'].hist()
 plt.show()
 
-s = open('preprocessed_session'+Video_code[0]+'.csv', 'w')
+print "NP"
+data = preprocess(data, 'NP', 30)
+print "NF"
+data=preprocess(data, 'NF', 30)
+print "NB"
+data=preprocess(data, 'NB', 30)
+print "MP"
+data=preprocess(data, 'MP', 30)
+print "AS"
+data = preprocessAS(data, 'AS')
+print "SR"
+data = preprocess(data, 'SR', 100)
+print "RL"
+data = preprocess(data, 'RL', 50)
+print "ES"
+data = preprocessES(data, 'ES')
+print "TP"
+data = preprocessTP(data, 'TP', 100)
+print data.describe()
+
+s = open('sessions/preprocessed_session'+Video_code[0]+'.csv', 'w')
 data.to_csv(s, index=False)
 
