@@ -25,29 +25,41 @@ data[nan_positions] = 0
 #normalizing the columns
 data_norm= (data-data.min()) / (data.max()-data.min())
 
+#correlation
+print(data_norm.corr(method='pearson', min_periods=10))
+
 # distance matrix
 D = pairwise_distances(data_norm, metric='euclidean')
 
 # split into  clusters
 M, C = kMedoids(D, 5)
+centroids = pd.DataFrame()
+
+for point in M:
+    centroids = centroids.append(data_norm.iloc[point])
+
+print(centroids)
 
 clusters = [None] * len(data_norm)
 for label in C:
     for point_idx in C[label]:
         clusters[point_idx] = label
 
+
 cluster_labels = [float(item) for item in clusters]
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-scatter = ax.scatter(data_norm['MP'], data_norm['TP'], c=cluster_labels)
-ax.set_xlabel('NB')
-ax.set_ylabel('TP')
+scatter = ax.scatter(data_norm['TP'], data_norm['MP'], c=cluster_labels)
+scatter = ax.scatter(centroids['TP'], centroids['MP'], c="Red", marker="x",s=100)
+ax.set_xlabel('TP')
+ax.set_ylabel('MP')
 plt.show()
 
-s = open('results/'+Video_code[0]+'_kmedoid_results.csv', 'w')
 data_norm['cluster_label'] = clusters
 data_norm['user_id'] = user_ids
+
+s = open('results/'+Video_code[0]+'_kmedoid_results.csv', 'w')
 data_norm.to_csv(s, index=False)
 
 
