@@ -1,6 +1,7 @@
 import csv
-import pandas as pd
+
 from numpy import *
+import pandas as pd
 import numpy as np
 import pylab as pl
 import matplotlib.pyplot as plt
@@ -8,13 +9,13 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn import cluster
 from scipy.spatial.distance import cdist, pdist
 from sklearn.metrics import silhouette_samples, silhouette_score
+from settings import Configurations
 
-Video_code = ['i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64']
-file = 'preprocessed_session'+Video_code[0]+'.csv'
+Video_code = Configurations.Video_code
+file = 'sessions/preprocessed_session'+Video_code[0]+'.csv'
 
 df = pd.read_csv(file, parse_dates=True)
-data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS', 'ES', 'session_no'))
-
+data = pd.DataFrame(df, columns=('NP', 'NB', 'NF', 'MP', 'SR', 'RL', 'AS','TP','session_no', 'ES'))
 
 #data = data[data.session_no == 1]
 nan_positions = isnan(data['MP'])
@@ -31,9 +32,13 @@ data_norm['SR'] = (data['SR'] / max)*100
 data_norm['RL'] = (data['RL'] / max)*100
 '''
 data_norm = data
-data_norm.drop('session_no', axis=1)
+#data_norm.drop('session_no', axis=1)
+#data_norm.drop('TP', axis=1)
 data_norm = (data-data.min()) / (data.max()-data.min())
 
+
+#correlation
+print data_norm.corr(method='pearson', min_periods=1)
 
 '''
 #silhoutte criterion graph
@@ -54,9 +59,9 @@ ax.plot(range_n_clusters, silhouette_avg_list)
 plt.show()
 '''
 
-'''
+
 #elbow method
-n = 15
+n = 30
 kMeansVar = [cluster.KMeans(n_clusters=k).fit(data_norm) for k in range(1, n)]
 centroids = [X.cluster_centers_ for X in kMeansVar]
 k_euclid = [cdist(data_norm, cent) for cent in centroids]
@@ -66,26 +71,26 @@ tss = sum(pdist(data_norm)**2)/data_norm.shape[0]
 bss = tss - wcss
 plt.plot(range(1, n), bss)
 plt.show()
-'''
 
 
-k_means = cluster.KMeans(n_clusters=6, random_state=10).fit(data_norm)
+k_means = cluster.KMeans(n_clusters=5, random_state=10).fit(data_norm)
 centroids = k_means.cluster_centers_
 cluster_labels = k_means.labels_
-data_norm['session_no'] = data['session_no']
+print (k_means.labels_)
+#data_norm['session_no'] = data['session_no']
+#data_norm['TP'] = data['TP']
 
-s = open('results/'+Video_code[0]+'_results.csv', 'w', newline='')
+s = open('results/'+Video_code[0]+'_results.csv', 'w')
 data_norm['cluster_label'] = k_means.labels_
 data_norm.to_csv(s, index=False)
 
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-color = ["Red","Yellow","Green"]
-scatter = ax.scatter(data_norm['AS'], data_norm['SR'], c=cluster_labels)
+scatter = ax.scatter(data_norm['MP'], data_norm['TP'], c=cluster_labels)
 scatter = ax.scatter(centroids[:, 0], centroids[:, 1], c="Green", marker="x")
-ax.set_xlabel('NF')
-ax.set_ylabel('MP')
+ax.set_xlabel('MP')
+ax.set_ylabel('TP')
 print(centroids)
 plt.show()
 
