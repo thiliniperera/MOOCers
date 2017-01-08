@@ -4,11 +4,8 @@ import csv
 import pandas as pd
 from settings import Configurations
 
-#Video_code = ['i4x-HumanitiesandScience-StatLearning-video-de1971b8a61e45d584364679e5e07e55']
 Video_code = Configurations.Video_code
 file = 'videos/sessionized_'+Video_code[0]+'.csv'
-
-start_time = datetime.now()
 
 # reading video interaction file for video
 df = pd.read_csv(file, parse_dates=True)
@@ -18,33 +15,33 @@ header = data.columns.values
 # Create csv file to write data and add the headings
 s = open('sessions/session_'+Video_code[0]+'.csv', 'w')
 csv_session = csv.writer(s)
-session = ['session_id', 'user_id', 'NP', 'NB', 'NF', 'MP', 'SR','RL', 'AS', 'ES','TP', 'session_no']
+session = ['user_id', 'NP', 'NB', 'NF', 'MP', 'SR','RL', 'AS', 'ES','TP', 'session_no']
 csv_session.writerow(session);
 
 # reading the unique student ids into a list
 student_ids = data.anon_screen_name.unique()
 
-
-
-
-session_id = 0
-iterator = int('0')
+#session_id = 0
+#iterator = int('0')
 
 #print iterator.dtypes
-no_of_removed_sessions = 0
+#no_of_removed_sessions = 0
 # for each student create activity sequence
 print("Total no of students: ",len(student_ids))
 for student in student_ids:
-    iterator = (iterator + 1)
+    print(student)
+    start_time = datetime.now()
+    #iterator = (iterator + 1)
 
     activity_list = data[data.anon_screen_name == student]
-    activity_list['time'] = pd.to_datetime(activity_list['time'],format ='%Y-%m-%d %H:%M:%S')
+    formatted_times = pd.to_datetime(activity_list['time'],format ='%Y-%m-%d %H:%M:%S')
+    activity_list.time = formatted_times
     session_ids = data.session_no.unique()
     video_start_val = 0
     video_end_val = 0
 
     for session in session_ids:
-        session_id += 1
+        #session_id += 1
 
         session_activity_list = activity_list[activity_list.session_no == session]
         playhead_positions = session_activity_list['video_current_time']
@@ -58,23 +55,24 @@ for student in student_ids:
             total_play_time = max_length - min_length
 
             if total_play_time < 100: # Remove sessions which lasted less than 100 seconds
-                no_of_removed_sessions += 1
+                #no_of_removed_sessions += 1
                 continue
         else:
-            no_of_removed_sessions += 1
+            #no_of_removed_sessions += 1
             continue
 
         # proportion of skipped video content - SR
         seek_forward_list = session_activity_list.loc[(session_activity_list.event_type == 'seek_video') & (
         session_activity_list.video_new_time > session_activity_list.video_old_time)]
-        seek_forward_list['SR'] = seek_forward_list['video_new_time'] - seek_forward_list['video_old_time']
+        seek_forward_list.loc[:,'SR'] = seek_forward_list['video_new_time'] - seek_forward_list['video_old_time']
         SR = seek_forward_list['SR'].sum()
 
         # replayed video length - RL (Sum of seek back events)
 
         seek_back_list = session_activity_list.loc[(session_activity_list.event_type == 'seek_video') & (
             session_activity_list.video_new_time < session_activity_list.video_old_time)]
-        seek_back_list['RL'] = seek_back_list['video_old_time'] - seek_back_list['video_new_time']
+
+        seek_back_list.loc[:,'RL'] = pd.to_numeric(seek_back_list['video_old_time']) - pd.to_numeric(seek_back_list['video_new_time'])
         RL = seek_back_list['RL'].sum()
 
         # find the no of pauses - NP
@@ -122,7 +120,7 @@ for student in student_ids:
         NF = len(session_activity_list[(session_activity_list.event_type == 'seek_video') & (session_activity_list.video_new_time > session_activity_list.video_old_time)])
 
         session_list = []
-        session_list.append(session_id)
+        #session_list.append(session_id)
         session_list.append(student)
         session_list.append(NP)
         session_list.append(NB)
@@ -136,25 +134,14 @@ for student in student_ids:
         session_list.append(session)
         csv_session.writerow(session_list)
 
-
-    # print(round((iterator / len(student_ids)) * 100, 2), "% completed")
-
-    '''
-        w = 'C://Users//Kushan//Documents//MOOCers//MOOCers//MOOCers Clickstream//Clustering//Videos//'+(student)+'.csv'
-
-        with open(w, 'w', newline='') as mycsvfile:
-            thedatawriter = csv.writer(mycsvfile)
-            thedatawriter.writerow(header)
-            for index, row in activity_list.iterrows():
-                thedatawriter.writerow(row)
-    '''
+        #end_time = datetime.now()
+       # print(end_time - start_time).microseconds / 1000
 
 print("Total no of students: ", len(student_ids))
-print("Total no of sessions: ", session_id)
-print("Total no of removed sessions: ", no_of_removed_sessions, " (", round((no_of_removed_sessions/session_id)*100, 2), "% of sessions removed)")
+#print("Total no of sessions: ", session_id)
+#print("Total no of removed sessions: ", no_of_removed_sessions, " (", round((no_of_removed_sessions/session_id)*100, 2), "% of sessions removed)")
 
-end_time = datetime.now()
-print("Running time : ", end_time - start_time)
+
 
 
 
