@@ -27,6 +27,7 @@ activity_list = []
 #for each student create activity sequence
 #print  len(student_ids)
 for student in student_ids:
+    print student
     j += 1
     activity_list = data[data.anon_screen_name == student]
     activity_list['time'] = pd.to_datetime(activity_list['time'], format=format)
@@ -52,7 +53,7 @@ for student in student_ids:
     activity_list['time'] = activity_list['time'].apply(lambda v: str(v))
     activity_list.to_csv(s, header=False, index=False)
 
-    print round((j / len(student_ids)) * 100, 2), "% completed"
+
 
 
 
