@@ -5,6 +5,7 @@ from settings import Configurations
 
 #preprocess NB,NP,NF, mP
 def preprocess(data,S,bin):
+
     bin_size = bin
     df = pd.DataFrame()
     res = pd.cut(data[S],bin_size)
@@ -94,6 +95,7 @@ plt.figure()
 data.hist()
 plt.show()
 
+
 print "NP"
 data = preprocess(data, 'NP', 30)
 print "NF"
@@ -105,7 +107,7 @@ data=preprocess(data, 'MP', 30)
 print "AS"
 data = preprocessAS(data, 'AS')
 print "SR"
-data = preprocess(data, 'SR', 100)
+data = preprocess(data, 'SR', 500)
 print "RL"
 data = preprocess(data, 'RL', 50)
 print "ES"
