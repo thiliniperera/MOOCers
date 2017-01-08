@@ -2,10 +2,9 @@ CS 101 - Engineering
 --------------------
 week 1
 Machine code - _bne_uCKof8
-Video id -
+Video id - i4x-Engineering-CS101-video-3f5301fa02fd4b60a541f1497eb3ff64
 ('Total Events: ', 328003)
 ('Total unique users: ', 28835)
-
 
 week 2
 mQNhppYqfBk
@@ -22,7 +21,6 @@ i4x-Engineering-CS101-video-z103
 ('Total unique users: ', 25073)
 sessions - 15622
 after preprocessing - 15605
-
 
 week 4
 fNQtlN5IKJk
@@ -45,4 +43,5 @@ St-OF8u3oNQ
 i4x-Engineering-CS101-video-z223
 Total Events:  97611
 Total unique users:  14069
+after preprocessing - 3758
 
