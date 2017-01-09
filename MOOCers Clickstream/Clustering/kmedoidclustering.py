@@ -29,7 +29,7 @@ data = data.drop('user_id', 1)
 data_norm = (data-data.min()) / (data.max()-data.min())
 
 #silhoutte criterion graph
-n_clusters = 3
+n_clusters = 4
 silhouette_avg_list = []
 k_means = cluster.KMeans(n_clusters=n_clusters, random_state=10).fit(data_norm)
 centroids = k_means.cluster_centers_
@@ -55,7 +55,7 @@ plt.show()
 
 #correlation
 #data_norm.corr(method='pearson', min_periods=10))
-n_clusters = 3
+#n_clusters = 4
 # split into  clusters
 k_means = KMedoids(n_clusters=n_clusters, random_state=10).fit(data_norm)
 
@@ -103,9 +103,9 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 scatter = ax.scatter(data_norm['TP'], data_norm['MP'], c=cluster_labels)
 scatter = ax.scatter(centroids[:, 6], centroids[:, 3], c="Red", marker="x", s=100)
-fig.savefig('results/'+Video_code[0]+'_'+str(n_clusters)+'.png')
 ax.set_xlabel('TP')
 ax.set_ylabel('MP')
+fig.savefig('results/'+Video_code[0]+'_'+str(n_clusters)+'.png')
 plt.show()
 
 s = open('results/'+Video_code[0]+'_kmedoid_results'+str(n_clusters)+'.csv', 'w')
