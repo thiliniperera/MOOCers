@@ -27,24 +27,17 @@ data = data.drop('user_id', 1)
 
 #normalizing the columns
 data_norm = (data-data.min()) / (data.max()-data.min())
-'''
+
 #silhoutte criterion graph
-range_n_clusters = range(2, 20)
+n_clusters = 3
 silhouette_avg_list = []
-for n_clusters in range_n_clusters:
-    k_means = cluster.KMeans(n_clusters=n_clusters, random_state=10).fit(data_norm)
-    centroids = k_means.cluster_centers_
-    cluster_labels = k_means.labels_
-    silhouette_avg = silhouette_score(data_norm, cluster_labels,sample_size=None, random_state=None,metric='sqeuclidean')
-    silhouette_avg_list.append(silhouette_avg)
-    print("For n_clusters =", n_clusters,"The average silhouette_score is :", silhouette_avg)
+k_means = cluster.KMeans(n_clusters=n_clusters, random_state=10).fit(data_norm)
+centroids = k_means.cluster_centers_
+cluster_labels = k_means.labels_
+silhouette_avg = silhouette_score(data_norm, cluster_labels,sample_size=None, random_state=None,metric='sqeuclidean')
+silhouette_avg_list.append(silhouette_avg)
+print("For n_clusters =", n_clusters,"The average silhouette_score is :", silhouette_avg)
 
-
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.plot(range_n_clusters, silhouette_avg_list)
-plt.show()
-'''
 
 '''
 #elbow method
@@ -62,7 +55,7 @@ plt.show()
 
 #correlation
 #data_norm.corr(method='pearson', min_periods=10))
-n_clusters = 4
+n_clusters = 3
 # split into  clusters
 k_means = KMedoids(n_clusters=n_clusters, random_state=10).fit(data_norm)
 
@@ -93,18 +86,22 @@ result = result.drop('unknown', 1)
 result = result.drop('course', 1)
 result['grade'].fillna(0, inplace=True)
 grade_mean = result.groupby(['cluster_label']).mean()
+cluster_grades = result.groupby(['cluster_label','grade']).count()
+#cluster_dropouts = cluster_grades[cluster_grades.grade == 0]
+print(cluster_grades['grade'])
+exit()
 center_points['mean_grade'] = grade_mean['grade']
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 scatter = ax.scatter(data_norm['TP'], data_norm['MP'], c=cluster_labels)
 scatter = ax.scatter(centroids[:, 6], centroids[:, 3], c="Red", marker="x", s=100)
-fig.savefig('results/'+Video_code[0]+'.png')
+fig.savefig('results/'+Video_code[0]+'_'+str(n_clusters)+'.png')
 ax.set_xlabel('TP')
 ax.set_ylabel('MP')
 plt.show()
 
-s = open('results/'+Video_code[0]+'_kmedoid_results.csv', 'w')
+s = open('results/'+Video_code[0]+'_kmedoid_results'+str(n_clusters)+'.csv', 'w')
 center_points.to_csv(s, index=True)
 
 print(center_points)
