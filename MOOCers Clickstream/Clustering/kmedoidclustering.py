@@ -86,11 +86,18 @@ result = result.drop('unknown', 1)
 result = result.drop('course', 1)
 result['grade'].fillna(0, inplace=True)
 grade_mean = result.groupby(['cluster_label']).mean()
-cluster_grades = result.groupby(['cluster_label','grade']).count()
+
+tempResult= result[result['grade']==0]
+#cluster_grades = tempResult.groupby(['cluster_label','grade']).count()
 #cluster_dropouts = cluster_grades[cluster_grades.grade == 0]
-print(cluster_grades['grade'])
-exit()
+
+cluster_grades= pd.DataFrame({'count' : tempResult.groupby(['cluster_label','grade']).size()}).reset_index()
+
+
 center_points['mean_grade'] = grade_mean['grade']
+center_points['dropouts'] = cluster_grades['count']/len(result)
+
+#print(center_points)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
