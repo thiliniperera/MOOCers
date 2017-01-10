@@ -29,7 +29,7 @@ data = data.drop('user_id', 1)
 data_norm = (data-data.min()) / (data.max()-data.min())
 
 #silhoutte criterion graph
-n_clusters = 4
+n_clusters = 3
 silhouette_avg_list = []
 k_means = cluster.KMeans(n_clusters=n_clusters, random_state=10).fit(data_norm)
 centroids = k_means.cluster_centers_
@@ -53,9 +53,8 @@ plt.plot(range(1, n), bss)
 plt.show()
 '''
 
-#correlation
-#data_norm.corr(method='pearson', min_periods=10))
-#n_clusters = 4
+
+
 # split into  clusters
 k_means = KMedoids(n_clusters=n_clusters, random_state=10).fit(data_norm)
 
@@ -75,7 +74,7 @@ label_list = []
 for i in range(n_clusters):
    label_list.append(label_count[i])
 
-center_points['cluster_size'] = label_list
+#center_points['cluster_size'] = label_list
 
 GradesFile = open(Configurations.Grades[0])
 df_grades = pd.read_csv(GradesFile, header=None, names=["user_id", "course", "grade", "unknown"])
@@ -86,32 +85,39 @@ result = result.drop('unknown', 1)
 result = result.drop('course', 1)
 result['grade'].fillna(0, inplace=True)
 grade_mean = result.groupby(['cluster_label']).mean()
+varience = result.groupby(['cluster_label']).var()
+
 
 tempResult= result[result['grade']==0]
 #cluster_grades = tempResult.groupby(['cluster_label','grade']).count()
 #cluster_dropouts = cluster_grades[cluster_grades.grade == 0]
 
 cluster_grades= pd.DataFrame({'count' : tempResult.groupby(['cluster_label','grade']).size()}).reset_index()
-
-
 center_points['mean_grade'] = grade_mean['grade']
+center_points['varience_grade'] = varience['grade']
 center_points['dropouts'] = cluster_grades['count']/len(result)
 
-#print(center_points)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 scatter = ax.scatter(data_norm['TP'], data_norm['MP'], c=cluster_labels)
 scatter = ax.scatter(centroids[:, 6], centroids[:, 3], c="Red", marker="x", s=100)
+
 ax.set_xlabel('TP')
 ax.set_ylabel('MP')
+
+
 fig.savefig('results/'+Video_code[0]+'_'+str(n_clusters)+'.png')
 plt.show()
 
 s = open('results/'+Video_code[0]+'_kmedoid_results'+str(n_clusters)+'.csv', 'w')
 center_points.to_csv(s, index=True)
 
-print(center_points)
+#correlation
+s = open('results/'+Video_code[0]+'_correlation'+str(n_clusters)+'.csv', 'w')
+corr_matrix = center_points.corr(method='pearson')
 
+print(center_points)
+print(corr_matrix)
 
 
