@@ -15,10 +15,11 @@ scaled.duration <- scale(dat,center = FALSE, scale = max(dat) - min(dat))
 newTrainData$ScaledDuration <- scaled.duration
 
 #Add final Grade
-dropout <- ifelse(tempGrade > 0, 1, 0)
+dropout <- ifelse(finalData$grade. > 0, 1, 0)
 finalData$dropout <- dropout
 newTrainData <- merge(newTrainData,finalData,by="anon_screen_name.")
 summary(newTrainData)
+newTrainData
 
 #remove unwanted columns
 newdata_withQuizBrainGrowth <- subset(newTrainData,newTrainData$X.module_type.=="problem" & newTrainData$anon_screen_name.!="None" & newTrainData$resource_display_name.=="Quiz - Brain Growth")
