@@ -1,12 +1,13 @@
 #from __future__ import division
 import pandas as pd
 import numpy as np
+import igraph
 
 from Settings import Configurations
 
 initialFile = open(Configurations.InitialForumDataFile[0])
 
-df = pd.read_csv(initialFile, nrows=1000)
+df = pd.read_csv(initialFile, nrows=500)
 uniqueUsers = df['anon_screen_name'].unique()
 users = df['anon_screen_name'].values
 uniqueCommentThreadIDs =  df[df['type'] == 'CommentThread']['forum_post_id'].unique()
@@ -37,7 +38,19 @@ for i in range(len(uniqueUsers)):
 
 initialMatrix= np.asmatrix(initialArray)
 adjMatrix = initialMatrix.dot(initialMatrix.T)
-
+print initialMatrix.shape
+print initialMatrix
 print adjMatrix.shape
 print adjMatrix
 
+
+adjMatrixDF = pd.DataFrame(data=adjMatrix, index=uniqueUsers,           columns=uniqueUsers)
+A = adjMatrixDF.values
+g = igraph.Graph.Adjacency((A > 0).tolist())
+
+# Add edge weights and node labels.
+g.es['weight'] = A[A.nonzero()]
+#g.vs['label'] = uniqueUsers  # or a.index/a.columns
+
+
+igraph.plot(g)
