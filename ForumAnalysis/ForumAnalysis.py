@@ -1,4 +1,4 @@
-from __future__ import division
+#from __future__ import division
 import pandas as pd
 import numpy
 
@@ -31,7 +31,7 @@ for i in range(len(uniqueUsers)):
                 involvement=involvement+1
 
         initialMatrix[i][j]=involvement if involvement<3 else min(2,involvement)
-        # print (i*yDim+j)*100/totalLoops
+        print (i*yDim+j)*100/totalLoops
 
 
 
