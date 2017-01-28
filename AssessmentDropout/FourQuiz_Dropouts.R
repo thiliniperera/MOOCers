@@ -53,18 +53,18 @@ summary(train1)
 test1 <- totalSet_withQuiz1[nrow(totalSet_withQuiz1)- half:nrow(totalSet_withQuiz1),]
 library(neuralnet)
 
-nn=neuralnet(grade.~videoWatch+ X.grade.+X.num_attempts.+train1$ScaledDuration,train1,hidden=2,err.fct = "sse",linear.output = FALSE)
+nn=neuralnet(dropout~videoWatch+ X.grade.+X.num_attempts.+train1$ScaledDuration,train1,hidden=2,err.fct = "sse",linear.output = FALSE)
 nn
 plot(nn)
 nn$weights
 
 
 #results_q1
-results_grade <- compute(nn, covariate = matrix(c(test1$videoWatch,test1$X.grade.,test1$X.num_attempts.,test1$ScaledDuration),byrow = TRUE,ncol = 4))
-results_grade$net.result
-result_table <- data.frame(student = test1$anon_screen_name.,actual = test1$grade., prediction_Q1 = results_grade$net.result)
+results_dropout <- compute(nn, covariate = matrix(c(test1$videoWatch,test1$X.grade.,test1$X.num_attempts.,test1$ScaledDuration),byrow = TRUE,ncol = 4))
+results_dropout$net.result
+result_table <- data.frame(student = test1$anon_screen_name.,actual = test1$dropout, prediction_Q1 = results_dropout$net.result)
 result_table_Q1<-unique(result_table)
-plot(results_grade$net.result)
+plot(results_dropout$net.result)
 
 
 #quiz 2****************************************************************************
@@ -85,17 +85,17 @@ summary(train2)
 test2 <- totalSet_withQuiz2[nrow(totalSet_withQuiz2)- half:nrow(totalSet_withQuiz2),]
 library(neuralnet)
 
-nn=neuralnet(grade.~videoWatch+ X.grade.+X.num_attempts.+train2$ScaledDuration,train2,hidden=2,err.fct = "sse",linear.output = FALSE)
+nn=neuralnet(dropout~videoWatch+ X.grade.+X.num_attempts.+train2$ScaledDuration,train2,hidden=2,err.fct = "sse",linear.output = FALSE)
 nn
 plot(nn)
 nn$weights
 
 #results_q2
-results_grade2 <- compute(nn, covariate = matrix(c(test2$videoWatch,test2$X.grade.,test2$X.num_attempts.,test2$ScaledDuration),byrow = TRUE,ncol = 4))
-results_grade2$net.result
-result_table2 <- data.frame(student = test2$anon_screen_name.,actual = test2$grade., prediction_Q2 = results_grade2$net.result)
+results_dropout2 <- compute(nn, covariate = matrix(c(test2$videoWatch,test2$X.grade.,test2$X.num_attempts.,test2$ScaledDuration),byrow = TRUE,ncol = 4))
+results_dropout2$net.result
+result_table2 <- data.frame(student = test2$anon_screen_name.,actual = test2$dropout, prediction_Q2 = results_dropout2$net.result)
 result_table_Q2<-unique(result_table2)
-plot(results_grade2$net.result)
+plot(results_dropout2$net.result)
 
 
 #quiz 3****************************************************************************
@@ -116,17 +116,17 @@ summary(train3)
 test3 <- totalSet_withQuiz3[nrow(totalSet_withQuiz3)- half:nrow(totalSet_withQuiz3),]
 library(neuralnet)
 
-nn=neuralnet(grade.~videoWatch+ X.grade.+X.num_attempts.+train3$ScaledDuration,train3,hidden=2,err.fct = "sse",linear.output = FALSE)
+nn=neuralnet(dropout~videoWatch+ X.grade.+X.num_attempts.+train3$ScaledDuration,train3,hidden=2,err.fct = "sse",linear.output = FALSE)
 nn
 plot(nn)
 nn$weights
 
 #results_q2
-results_grade3 <- compute(nn, covariate = matrix(c(test3$videoWatch,test3$X.grade.,test3$X.num_attempts.,test3$ScaledDuration),byrow = TRUE,ncol = 4))
-results_grade3$net.result
-result_table3 <- data.frame(student = test3$anon_screen_name.,actual = test3$grade., prediction_Q3 = results_grade3$net.result)
+results_dropout3 <- compute(nn, covariate = matrix(c(test3$videoWatch,test3$X.grade.,test3$X.num_attempts.,test3$ScaledDuration),byrow = TRUE,ncol = 4))
+results_dropout3$net.result
+result_table3 <- data.frame(student = test3$anon_screen_name.,actual = test3$dropout, prediction_Q3 = results_dropout3$net.result)
 result_table_Q3<-unique(result_table3)
-plot(results_grade3$net.result)
+plot(results_dropout3$net.result)
 
 
 #quiz 4****************************************************************************
@@ -150,7 +150,7 @@ summary(train4)
 test4 <- totalSet_withQuiz4[nrow(totalSet_withQuiz4)- half:nrow(totalSet_withQuiz4),]
 library(neuralnet)
 
-nn=neuralnet(grade.~videoWatch+ X.grade.+X.num_attempts.+train4$ScaledDuration,train4,hidden=2,err.fct = "sse",linear.output = FALSE)
+nn=neuralnet(dropout~videoWatch+ X.grade.+X.num_attempts.+train4$ScaledDuration,train4,hidden=2,err.fct = "sse",linear.output = FALSE)
 nn
 plot(nn)
 nn$weights
@@ -158,26 +158,26 @@ nn$weights
 
 
 #results_q2
-results_grade4 <- compute(nn, covariate = matrix(c(test4$videoWatch,test4$X.grade.,test4$X.num_attempts.,test4$ScaledDuration),byrow = TRUE,ncol = 4))
-results_grade4$net.result
-result_table4 <- data.frame(student = test4$anon_screen_name.,actual = test4$grade., prediction_Q4 = results_grade4$net.result)
+results_dropout4 <- compute(nn, covariate = matrix(c(test4$videoWatch,test4$X.grade.,test4$X.num_attempts.,test4$ScaledDuration),byrow = TRUE,ncol = 4))
+results_dropout4$net.result
+result_table4 <- data.frame(student = test4$anon_screen_name.,actual = test4$dropout, prediction_Q4 = results_dropout4$net.result)
 result_table_Q4<-unique(result_table4)
-plot(results_grade4$net.result)
+plot(results_dropout4$net.result)
 
 
 #merge result tables
-result_table_total <- merge(x=result_table_Q1,result_table_Q2,all.x = TRUE)
-result_table_total <- merge(x=result_table_total,result_table_Q3,all.x = TRUE)
-result_table_total <- merge(x=result_table_total,result_table_Q4,all.x = TRUE)
-result_table_total <- unique(result_table_total)
-result_table_total[is.na(result_table_total)]<-0
+result_dropout_table_total <- merge(x=result_table_Q1,result_table_Q2,all.x = TRUE)
+result_dropout_table_total <- merge(x=result_dropout_table_total,result_table_Q3,all.x = TRUE)
+result_dropout_table_total <- merge(x=result_dropout_table_total,result_table_Q4,all.x = TRUE)
+result_dropout_table_total <- unique(result_dropout_table_total)
+result_dropout_table_total[is.na(result_dropout_table_total)]<-0
 
-nrow(result_table_total[result_table_total$actual==0.00,])
+nrow(result_dropout_table_total[result_dropout_table_total$actual==0.00,])
 
-half <- round(nrow(result_table_total)/2)
-train_result <- result_table_total[1:half,]
+half <- round(nrow(result_dropout_table_total)/2)
+train_result <- result_dropout_table_total[1:half,]
 summary(train_result)
-test_result <- result_table_total[nrow(result_table_total)- half:nrow(result_table_total),]
+test_result <- result_dropout_table_total[nrow(result_dropout_table_total)- half:nrow(result_dropout_table_total),]
 
 library(neuralnet)
 result_nn=neuralnet(train_result$actual~train_result$prediction_Q1+train_result$prediction_Q2+train_result$prediction_Q3+train_result$prediction_Q4,train_result,hidden=2,err.fct = "sse",linear.output = FALSE)
@@ -188,13 +188,13 @@ result_nn$weights
 #result
 results_grade_all <- compute(result_nn, covariate = matrix(c(test_result$prediction_Q1,test_result$prediction_Q2,test_result$prediction_Q3,test_result$prediction_Q4),byrow = TRUE,ncol = 4))
 results_grade_all$net.result
-plot(results_grade4$net.result)
+plot(results_grade_all$net.result)
 
 
 #Calculate Error
-predict_nn <- results_grade_all$net.result*(max(result_table_total$actual)-min(result_table_total$actual))+min(result_table_total$actual)
+predict_nn <- results_grade_all$net.result*(max(result_dropout_table_total$actual)-min(result_dropout_table_total$actual))+min(result_dropout_table_total$actual)
 predict_nn
-test_results <- test_result$actual*(max(result_table_total$actual)-min(result_table_total$actual))+min(result_table_total$actual)
+test_results <- test_result$actual*(max(result_dropout_table_total$actual)-min(result_dropout_table_total$actual))+min(result_dropout_table_total$actual)
 test_results
 
 MSE <- sum((test_results - predict_nn)^2)/nrow(test_result)
