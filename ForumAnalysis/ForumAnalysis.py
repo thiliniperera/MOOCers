@@ -31,12 +31,13 @@ for i in range(len(uniqueUsers)):
                 involvement=involvement+1
 
         initialArray[i][j]=involvement if involvement < 3 else min(2, involvement)
-        print (i*yDim+j)*100/totalLoops
+        #print (i*yDim+j)*100/totalLoops
 
 
 
 initialMatrix= np.asmatrix(initialArray)
-adjMatrix = initialMatrix.T.dot(initialMatrix)
+adjMatrix = initialMatrix.dot(initialMatrix.T)
 
+print adjMatrix.shape
 print adjMatrix
 
