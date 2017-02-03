@@ -1,0 +1,10 @@
+DELETE DATABASE openedx;
+
+CREATE TABLE `openedx`.`video_interaction` ( `event_type` VARCHAR(50) NOT NULL , `resource_display_name` VARCHAR(100) NOT NULL , `video_current_time` FLOAT NULL , `video_speed` FLOAT NULL , `video_new_speed` FLOAT NULL , `video_old_speed` FLOAT NULL , `video_new_time` FLOAT NULL , `video_old_time` FLOAT NULL , `video_seek_type` VARCHAR(100) NOT NULL , `video_code` VARCHAR(100) NOT NULL , `time` DATETIME NOT NULL , `course_display_name` VARCHAR(100) NOT NULL , `anon_screen_name` VARCHAR(100) NOT NULL , `video_id`;
+
+ALTER TABLE `video_interaction` CHANGE `video_current_time` `video_current_time` FLOAT NULL;
+ALTER TABLE `video_interaction` CHANGE `video_current_time` `video_current_time` VARCHAR(20) NULL;
+ALTER TABLE `video_interaction` CHANGE `video_speed` `video_speed` VARCHAR(20) NULL DEFAULT NULL, CHANGE `video_new_speed` `video_new_speed` VARCHAR(20) NULL DEFAULT NULL, CHANGE `video_old_speed` `video_old_speed` VARCHAR(20) NULL DEFAULT NULL, CHANGE `video_new_time` `video_new_time` VARCHAR(20) NULL DEFAULT NULL, CHANGE `video_old_time` `video_old_time` VARCHAR(20) NULL DEFAULT NULL;
+
+
+LOAD DATA INFILE 'test.csv' INTO TABLE openedx.video_interaction FIELDS TERMINATED by ',' LINES TERMINATED BY '\n';
