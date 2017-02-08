@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumino - Widgets</title>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/datepicker3.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+
+<!--Icons-->
+<script src="js/lumino.glyphs.js"></script>
+
+<style>
+text {
+  font: 10px sans-serif;
+}
+
+line {
+  stroke: #B2BEB5;
+  stroke-width: 0.3px;
+}
+
+circle {
+  stroke-width: 0.5px;
+}
+</style>
+
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span>Lumino</span>Admin</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Profile</a></li>
+							<li><a href="#"><svg class="glyph stroked gear"><use xlink:href="#stroked-gear"></use></svg> Settings</a></li>
+							<li><a href="#"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+			<li class="active"><a href="widgets.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
+			<li><a href="charts.html"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
+			<li><a href="tables.html"><svg class="glyph stroked table"><use xlink:href="#stroked-table"></use></svg> Tables</a></li>
+			<li><a href="forms.html"><svg class="glyph stroked pencil"><use xlink:href="#stroked-pencil"></use></svg> Forms</a></li>
+			<li><a href="panels.html"><svg class="glyph stroked app-window"><use xlink:href="#stroked-app-window"></use></svg> Alerts &amp; Panels</a></li>
+			<li><a href="icons.html"><svg class="glyph stroked star"><use xlink:href="#stroked-star"></use></svg> Icons</a></li>
+			<li class="parent ">
+				<a href="#">
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Dropdown 
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Sub Item 1
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Sub Item 2
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Sub Item 3
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="login.html"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+		</ul>
+		<div class="attribution">Template by <a href="http://www.medialoot.com/item/lumino-admin-bootstrap-template/">Medialoot</a><br/><a href="http://www.glyphs.co" style="color: #333;">Icons by Glyphs</a></div>
+	</div><!--/.sidebar-->
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li class="active">Icons</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Forum Analysis</h1>
+			</div>
+		</div><!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Bar Chart</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<canvas class="main-chart" id="bar-chart" height="200" width="600"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Advanced Table</div>
+					<div class="panel-body">
+						<table data-toggle="table" data-url="tables/forum.json"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
+						    <thead>
+						    <tr>						       
+						        <th data-field="index" data-sortable="true">Student</th>
+						        <th data-field="score"  data-sortable="true">Score</th>
+						    </tr>
+						    </thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Social Network Graph</div>
+					<div class="panel-body" id="network-graph">
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+
+
+		
+	</div>	<!--/.main-->
+		  
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/chart-data.js"></script>
+	<script src="js/easypiechart.js"></script>
+	<script src="js/easypiechart-data.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/bootstrap-table.js"></script>
+	<script>
+		$('#calendar').datepicker({
+		});
+
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+
+		var width = 960,
+    	height = 500,
+    	radius = 6;
+
+
+
+    	d3.json("graphFile.json", function(json) {
+		  
+		    nodes = json.nodes;
+		    links = json.links;
+
+		     var fill = d3.scale.category20();
+		 
+
+			n=100;
+
+			console.log(nodes);
+
+			var force = d3.layout.force()
+			    .nodes(nodes)
+			    .links(links)
+			    .distance(50)
+			    .charge(-500)
+			    .size([width, height]);
+
+			var svg = d3.select("#network-graph").append("svg")
+			    .attr("width", width)
+			    .attr("height", height);
+
+			var loading = svg.append("text")
+			    .attr("x", width / 2)
+			    .attr("y", height / 2)
+			    .attr("dy", ".35em")
+			    .style("text-anchor", "middle")
+			    .text("Simulating. One moment please…");
+
+			// Use a timeout to allow the rest of the page to load first.
+			setTimeout(function() {
+
+			  // Put a lightweight wrapper around force.tick which will
+			  // delegate to force.tick to do the computing and will
+			  // return true afterwards. Upon the first call to .tick
+			  // this will immediately break from the running timer
+			  // giving us the opportunity to run the iterations in our own loop 
+			  force.tick = (function(forceTick) {
+			    return function() {
+			      forceTick();
+			      return true; 
+			    }
+			  }(force.tick));
+			  
+			  // To run the computing steps in our own loop we need
+			  // to manage the cooling by ourselves.
+			  var alphaStart = 0.1;
+			  var alphaEnd   = 0.005;
+			  var alpha      = alphaStart;
+			  var steps      = n * n;
+			  var cooling = Math.pow(alphaEnd / alphaStart, 1 / steps);  
+			  
+			  // Calling start will initialize our layout and start the timer
+			  // doing the actual calculations. This timer will halt, however,
+			  // on the first call to .tick.
+			  force.start();
+			  
+			  // The loop will execute tick() a fixed number of times.
+			  // Throughout the loop the cooling of the system is controlled
+			  // by decreasing alpha to reach the freezing point once
+			  // the desired number of steps is performed.
+			  for (var i = 0; i < steps; i++) {
+			  	console.log(i)
+			    force.alpha(alpha*=cooling).tick();
+			  }
+			  force.stop();
+
+			  svg.selectAll("line")
+			      .data(links)
+			    .enter().append("line")
+			      .attr("x1", function(d) { return d.source.x; })
+			      .attr("y1", function(d) { return d.source.y; })
+			      .attr("x2", function(d) { return d.target.x; })
+			      .attr("y2", function(d) { return d.target.y; });
+
+			  svg.selectAll("circle")
+			      .data(nodes)
+			    .enter().append("circle")
+			      .attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+			      .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); })
+			      .attr("r", radius - .75)
+      				.style("fill", function(d) { return fill(d.group); })
+      				.style("stroke", function(d) { return d3.rgb(fill(d.group)).darker(); })
+
+			  loading.remove();
+			}, 10);
+
+ });
+	</script>	
+</body>
+
+</html>
