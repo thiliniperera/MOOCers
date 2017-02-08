@@ -9,7 +9,7 @@ from Settings import Configurations
 
 initialFile = open(Configurations.InitialForumDataFile[0])
 
-df = pd.read_csv(initialFile,nrows = 100)
+df = pd.read_csv(initialFile,nrows =200)
 uniqueUsers = df['anon_screen_name'].unique()
 print "Unique users: ",len(uniqueUsers)
 users = df['anon_screen_name'].values
@@ -54,6 +54,13 @@ nodes['group'] =0
 cl = g.community_multilevel()
 igraph.plot(g,"social_network"+Configurations.course+".png",vertex_color=[Configurations.color_list[x] for x in cl.membership])
 
+degree_df = pd.DataFrame(data=degree_list, columns=['links'])
+max = np.max(degree_list)
+min = np.min(degree_list)
+score = (degree_list-min)/(max-min)
+nodes['score'] = score
+scoreDF = pd.DataFrame(data=score, columns=['score'])
+
 index = 0
 for row in cl:
     index += 1
@@ -65,7 +72,8 @@ for index, row in nodes.iterrows():
     user_id = row.user_id
     degree = row.degree
     group = row.group
-    response['nodes'].append({'user_id': user_id, 'group' : group, 'degree' : degree})
+    score = row.score
+    response['nodes'].append({'user_id': user_id, 'group' : group, 'degree' : degree, 'score' : score})
 
 for row in edge_list:
     source = row[0]
@@ -79,22 +87,23 @@ with open('C://xampp//htdocs//lumino//graphFile.json', 'w') as fp:
 
 
 
-
-
-
-
-
-
-
-
-
-sum = np.sum(A,axis=1)
-graph = pd.DataFrame(data=sum, columns=['links'])
-max = np.max(sum)
-min = np.min(sum)
-sum = (sum-min)/(max-min)
-sumDF = pd.DataFrame(data=sum, columns=['score'])
-#sumDF.hist()
+scoreDF.hist()
 #plt.show()
 
 
+GradesFile = open(Configurations.Grades[0])
+df_grades = pd.read_csv(GradesFile, header=None, names=["user_id", "course", "grade", "unknown"])
+grades_values = pd.DataFrame(df_grades)
+result = pd.merge(left=nodes, right=grades_values, left_on='user_id', right_on='user_id', how='left')
+
+result = result.drop('unknown', 1)
+result = result.drop('course', 1)
+
+print "Grade null" , len(result) - result['grade'].count()
+result['grade'].fillna(0, inplace=True)
+grade_mean = result.groupby(['group']).mean()
+varience = result.groupby(['group']).var()
+
+
+print "Mean", grade_mean
+print "Varience" ,varience
