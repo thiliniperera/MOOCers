@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask
+from flask import Flask, render_template
 from Learner import Learner
 import os
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-   return 'Analytics platform'
+    return render_template('index.html')
 
 
 
@@ -19,8 +19,8 @@ def getUser():
     return user.toJSON()
 
 @app.route('/analyse/forum')
-def getUser():
-    os.system('python ForumAnalysis.py')
+def analys():
+    # os.system('python ForumAnalysis.py')
     return "Analysis initiated"
 
 
