@@ -53,10 +53,10 @@
             <tbody>
             {% for n in mylist %}
             <a href="#"><tr>
-                <td><a href="{{n.href}}">{{n.id}}</a></td>
-                <td><a href="{{n.href}}">{{n.name}}</a></td>
-                <td><a href="{{n.href}}">{{n.grade}}</a></td>
-                <td><a href="{{n.href}}">{{n.location}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.id}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.name}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.grade}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.location}}</a></td>
             </tr>
             {%- endfor %}
             </tbody>

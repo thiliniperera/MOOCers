@@ -32,8 +32,15 @@ def learners():
         an_item = dict(id=row['index'], name=row['name'], grade=row['grade'],location=row['location'],href=index)
         mylist.append(an_item)
     # df=df.apply(lambda x: '<a href="http://example.com/{0}">link</a>'.format(x))
-    print mylist
+    # print mylist
     return render_template('learners.html',mylist= mylist)
+
+@app.route('/learners/<userid>')
+def getUserinfo(userid = None):
+    initialFile = 'static/assets/students.csv'
+    df = pd.read_csv(initialFile, nrows=200)
+    # print df.irow(userid)
+    return render_template('user.html',name= df.irow(userid))
 
 @app.route('/csv')
 def readDF():
