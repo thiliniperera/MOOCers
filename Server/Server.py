@@ -18,9 +18,17 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/analyse')
+@app.route('/courses')
+def courses():
+    return render_template('courses.html')
+
+@app.route('/platform')
 def platform():
     return render_template('platform.html')
+
+@app.route('/test')
+def test():
+    return render_template('child_page.html')
 
 @app.route('/learners')
 def learners():
