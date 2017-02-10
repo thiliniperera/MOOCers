@@ -1,5 +1,5 @@
 class Configurations:
-    InitialForumDataFile = ['C://Users//Kushan//Documents//Data//Data//Engineering_CS101_Summer2014//Engineering_CS101_Summer2014_Forum.csv']
+    InitialForumDataFile = ['/home/kasun/Desktop/MOOCers/HumanitiesandScience_StatLearning_Winter2015_Forum.csv']
     course = 'Engineering'
     Grades = ['C://Users//Kushan//Documents//Data//Data//Engineering_CS101_Summer2014//Engineering_CS101_Summer2014_FinalGrade.csv']
     color_list = ["#000000", "#FFFF00", "#1CE6FF", "#FF34FF", "#FF4A46", "#008941", "#006FA6", "#A30059",

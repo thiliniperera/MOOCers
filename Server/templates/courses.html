@@ -1,0 +1,30 @@
+{% extends "base_platform.html" %}
+{% block title %} Courses {% endblock %}
+{% block more_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
+{% endblock %}
+{% block content %}
+<ul class="css-tabs">
+  <li><a href="/csv">Tab 1</a></li>
+  <li><a href="/csv">Second tab</a></li>
+  <li><a href="/csv">An ultra long third tab</a></li>
+</ul>
+
+<!-- single pane. it is always visible -->
+<div class="css-panes">
+  <div style="display:block"></div>
+</div>
+{% endblock %}
+{% block more_js %}
+  <script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
+<script>
+    $(function () {
+        $("ul.css-tabs").tabs("div.css-panes > div", {effect: 'ajax'});
+    });
+</script>
+<script>
+    $(function () {
+        $('.sidebar-links > a.link-yellow').addClass('selected');
+    });
+</script>
+{% endblock %}

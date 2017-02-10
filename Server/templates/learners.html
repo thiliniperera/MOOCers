@@ -1,0 +1,50 @@
+{% extends "base_platform.html" %}
+{% block title %} Enrolled Users {% endblock %}
+{% block more_css %}
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row header" style="text-align:center">
+        <h3>Enrolled Users</h3>
+    </div>
+    <table id="myTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Index</th>
+            <th>Name</th>
+            <th>Performance</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for n in mylist %}
+        <a href="#">
+            <tr>
+                <td><a href="learners/{{n.href}}">{{n.id}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.name}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.grade}}</a></td>
+                <td><a href="learners/{{n.href}}">{{n.location}}</a></td>
+            </tr>
+            {%- endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
+{% block more_js %}
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myTable').dataTable();
+    });
+</script>
+
+<script>
+    $(function () {
+         $('.sidebar-links > a.link-red').addClass('selected');
+    });
+</script>
+{% endblock %}
