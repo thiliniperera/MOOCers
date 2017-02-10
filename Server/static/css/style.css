@@ -67,6 +67,11 @@
   color: #EF3B3A;
   text-decoration: none;
 }
+.form .error {
+  color: #EF3B3A;
+    margin: 10px;
+  text-decoration: none;
+}
 .form .register-form {
   display: none;
 }
