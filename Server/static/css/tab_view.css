@@ -58,8 +58,6 @@ ul.css-tabs a.current {
 }
 
 .css-panes div {
-    display: none;
-    border: 1px solid #ccc;
     border-width: 0 1px 1px 1px;
     min-height: 150px;
     padding: 15px 20px;

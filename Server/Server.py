@@ -59,10 +59,9 @@ def getUser():
     user = Learner("user","A", 235232)
     return user.toJSON()
 
-@app.route('/analyse/forum')
-def analys():
-    # os.system('python ForumAnalysis.py')
-    return "Analysis initiated"
+@app.route('/forum')
+def forum():
+    return render_template('forum.html')
 
 
 if __name__ == '__main__':
