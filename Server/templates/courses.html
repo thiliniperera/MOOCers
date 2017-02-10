@@ -2,21 +2,95 @@
 {% block title %} Courses {% endblock %}
 {% block more_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/styles.css') }}">
 {% endblock %}
 {% block content %}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Engineering Summer 2014</h1>
+    </div>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-3">
+        <div class="panel panel-blue panel-widget ">
+            <div class="row no-padding">
+                <div class="col-sm-3 col-lg-5 widget-left">
+                    <svg class="glyph stroked calendar">
+                        <use xlink:href="#stroked-calendar"></use>
+                    </svg>
+                </div>
+                <div class="col-sm-9 col-lg-7 widget-right">
+                    <div class="large">7</div>
+                    <div class="text-muted">Weeks</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-3">
+        <div class="panel panel-orange panel-widget">
+            <div class="row no-padding">
+                <div class="col-sm-3 col-lg-5 widget-left">
+                    <svg class="glyph stroked male-user">
+                        <use xlink:href="#stroked-male-user"></use>
+                    </svg>
+                </div>
+                <div class="col-sm-9 col-lg-7 widget-right">
+                    <div class="large">7000</div>
+                    <div class="text-muted">Students</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-3">
+        <div class="panel panel-teal panel-widget">
+            <div class="row no-padding">
+                <div class="col-sm-3 col-lg-5 widget-left">
+                    <svg class="glyph stroked pencil">
+                        <use xlink:href="#stroked-pencil"></use>
+                    </svg>
+                </div>
+                <div class="col-sm-9 col-lg-7 widget-right">
+                    <div class="large">24</div>
+                    <div class="text-muted">Assignments</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-3">
+        <div class="panel panel-red panel-widget">
+            <div class="row no-padding">
+                <div class="col-sm-3 col-lg-5 widget-left">
+
+                    <svg class="glyph stroked video">
+                        <use xlink:href="#stroked-video"></use>
+                    </svg>
+                </div>
+                <div class="col-sm-9 col-lg-7 widget-right">
+                    <div class="large">25</div>
+                    <div class="text-muted">Videos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!--/.row-->
 <ul class="css-tabs">
-  <li><a href="/csv">Tab 1</a></li>
-  <li><a href="/csv">Second tab</a></li>
-  <li><a href="/csv">An ultra long third tab</a></li>
+    <li><a href="/csv">Tab 1</a></li>
+    <li><a href="/csv">Second tab</a></li>
+    <li><a href="/csv">An ultra long third tab</a></li>
 </ul>
 
 <!-- single pane. it is always visible -->
 <div class="css-panes">
-  <div style="display:block"></div>
+    <div style="display:block"></div>
 </div>
 {% endblock %}
 {% block more_js %}
-  <script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/lumino.glyphs.js') }}"></script>
+<script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
 <script>
     $(function () {
         $("ul.css-tabs").tabs("div.css-panes > div", {effect: 'ajax'});

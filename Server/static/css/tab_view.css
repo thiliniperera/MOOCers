@@ -1,5 +1,5 @@
 body {
-    padding: 50px 80px;
+    padding: 30px 80px;
     font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana
 }
 
@@ -14,32 +14,34 @@ a:active {
 ul.css-tabs {
     margin: 0!important;
     padding: 0;
-    height: 30px;
-    border-bottom: 1px solid #666
+    height: 43px;
+    border-bottom: 1px solid #ccc;
 }
 
 ul.css-tabs li {
     float: left;
     padding: 0;
     margin: 0;
-    list-style-type: none
+    list-style-type: none;
 }
 
 ul.css-tabs a {
     float: left;
-    font-size: 13px;
+    font-size: 16px;
     display: block;
-    padding: 5px 30px;
+    padding: 9px 30px;
     text-decoration: none;
-    border: 1px solid #666;
+    border: 1px solid #ccc;
     border-bottom: 0;
-    height: 18px;
+    height: 22px;
     background-color: #efefef;
     color: #777;
     margin-right: 2px;
     position: relative;
     top: 1px;
     outline: 0;
+    box-sizing: content-box;
+    border-bottom: 1px solid #ccc;
     -moz-border-radius: 4px 4px 0 0
 }
 
@@ -49,17 +51,17 @@ ul.css-tabs a:hover {
 }
 
 ul.css-tabs a.current {
-    background-color: #ddd;
-    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
     color: #000;
     cursor: default
 }
 
 .css-panes div {
     display: none;
-    border: 1px solid #666;
+    border: 1px solid #ccc;
     border-width: 0 1px 1px 1px;
     min-height: 150px;
     padding: 15px 20px;
-    /*background-color: #ddd*/
+    background-color: #fff
 }
