@@ -1,6 +1,5 @@
 # coding=utf-8
 from flask import Flask, render_template, request, redirect, url_for
-from Learner import Learner
 from Settings import Configurations
 import pandas as pd
 import os
@@ -13,7 +12,8 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
 # Our mock database.
-users = {'kasun': {'pw': 'pass'}}
+users = {'kasun': {'pw': 'pass'},
+         'admin': {'pw': 'admin'}}
 
 
 class User(flask_login.UserMixin):
@@ -47,16 +47,17 @@ class User(flask_login.UserMixin):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('index.html')
+        return render_template('login.html')
 
-    uName = request.form['username']
-    if request.form['password'] == users[uName]['pw']:
-        user = User()
-        user.id = uName
-        flask_login.login_user(user)
-        return redirect(url_for('platform'))
-
-    return 'Bad login'
+    try:
+        uName = request.form['username']
+        if request.form['password'] == users[uName]['pw']:
+            user = User()
+            user.id = uName
+            flask_login.login_user(user)
+            return redirect(url_for('platform'))
+    except:
+        return render_template('login.html', message='username or password mismatch!')
 
 
 @app.route('/protected')
@@ -73,30 +74,23 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return 'Unauthorized user'
-
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        if request.form['username'] == 'admin' and \
-                        request.form['password'] == 'admin':
-            return redirect(url_for('platform'))
-
-    return render_template('index.html')
+    return redirect(url_for('login'))
 
 
 @app.route('/courses')
+@flask_login.login_required
 def courses():
     return render_template('courses.html')
 
 
-@app.route('/platform')
+@app.route('/')
+@flask_login.login_required
 def platform():
     return render_template('platform.html')
 
 
 @app.route('/learners')
+@flask_login.login_required
 def learners():
     initialFile = 'static/assets/students.csv'
     df = pd.read_csv(initialFile, nrows=200)
@@ -111,6 +105,7 @@ def learners():
 
 
 @app.route('/learners/<userid>')
+@flask_login.login_required
 def getUserinfo(userid=None):
     initialFile = 'static/assets/students.csv'
     df = pd.read_csv(initialFile, nrows=200)
@@ -119,6 +114,7 @@ def getUserinfo(userid=None):
 
 
 @app.route('/csv')
+@flask_login.login_required
 def readDF():
     initialFile = 'static/assets/students.csv'
 
@@ -126,12 +122,8 @@ def readDF():
     return df.to_html()
 
 
-@app.route('/user')
-def getUser():
-    user = Learner("user", "A", 235232)
-    return user.toJSON()
-
 @app.route('/forum')
+@flask_login.login_required
 def forum():
     return render_template('forum.html')
 
