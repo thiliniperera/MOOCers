@@ -86,7 +86,7 @@ $.getJSON('graphFile.json', function (data) {
                     },
                     {
                         "label": "0.9",
-                        "value": 7
+                        "value": 7}
                 ]
             }
         }).render();

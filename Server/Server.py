@@ -13,7 +13,7 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
 # Our mock database.
-users = {'kasun.bdn@gmail.com': {'pw': 'pass'}}
+users = {'kasun': {'pw': 'pass'}}
 
 
 class User(flask_login.UserMixin):
@@ -47,20 +47,14 @@ class User(flask_login.UserMixin):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return '''
-               <form action='login' method='POST'>
-                <input type='text' name='email' id='email' placeholder='email'></input>
-                <input type='password' name='pw' id='pw' placeholder='password'></input>
-                <input type='submit' name='submit'></input>
-               </form>
-               '''
+        return render_template('index.html')
 
-    email = request.form['email']
-    if request.form['pw'] == users[email]['pw']:
+    uName = request.form['username']
+    if request.form['password'] == users[uName]['pw']:
         user = User()
-        user.id = email
+        user.id = uName
         flask_login.login_user(user)
-        return redirect(url_for('protected'))
+        return redirect(url_for('platform'))
 
     return 'Bad login'
 
