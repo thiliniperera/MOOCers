@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,send_from_directory
 from Settings import Configurations
 import pandas as pd
 import os
@@ -13,7 +13,8 @@ login_manager.init_app(app)
 
 # Our mock database.
 users = {'kasun': {'pw': 'pass'},
-         'admin': {'pw': 'admin'}}
+         'admin': {'pw': 'admin'},
+         'demo':{'pw':'demo'}}
 
 
 class User(flask_login.UserMixin):
@@ -126,6 +127,12 @@ def readDF():
 @flask_login.login_required
 def forum():
     return render_template('forum.html')
+
+@app.route('/json/<path:path>')
+@flask_login.login_required
+def send_json(path):
+    print path
+    return send_from_directory(app.static_folder, path)
 
 
 if __name__ == '__main__':

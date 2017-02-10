@@ -77,29 +77,56 @@
         </div>
     </div>
 </div><!--/.row-->
-<ul class="css-tabs">
-    <li><a href="/csv">Tab 1</a></li>
-    <li><a href="/forum">Forum</a></li>
-    <li><a href="/csv">An ultra long third tab</a></li>
+<ul id="nav" class="css-tabs">
+    <li><a id="tab1" href="/csv">Tab 1</a></li>
+    <li><a id="tab2" href="/forum">Forum</a></li>
+    <li><a id="tab3" href="/csv">An ultra long third tab</a></li>
 </ul>
 
 <!-- single pane. it is always visible -->
-<div class="css-panes">
+<div id="ajax-content" class="css-panes">
     <div style="display:block"></div>
 </div>
 {% endblock %}
 {% block more_js %}
 <script src="{{ url_for('static', filename = 'js/lumino.glyphs.js') }}"></script>
-<script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
 <!--forum js files-->
 <script src="{{ url_for('static', filename = 'js/fusioncharts/fusioncharts.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/fusioncharts/themes/fusioncharts.theme.fint.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/forum.js') }}"></script>
 <!--end of forum js files-->
 <script>
-    $(function () {
-        $("ul.css-tabs").tabs("div.css-panes > div", {effect: 'ajax'});
+
+    $(document).ready(function () {
+        $("#nav li a").click(function () {
+
+            $("#ajax-content").empty();
+            $("#nav li a").removeClass('current');
+            $(this).addClass('current');
+
+
+            $.ajax({
+                url: this.href, success: function (html) {
+                    $("#ajax-content").empty().append(html);
+                 if ($("#nav li a.current").attr('id') === "tab2") {
+                     displayForumScore();
+                 }
+                }
+            });
+            return false;
+        });
+
+        $("#ajax-content").empty();
+        $.ajax({
+            url: '/csv', success: function (html) {
+                $("#ajax-content").empty().append(html);
+                $("#nav li a").first().addClass('current');
+
+            }
+        });
     });
+
+
 </script>
 <script>
     $(function () {
