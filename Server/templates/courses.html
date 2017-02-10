@@ -91,6 +91,11 @@
 {% block more_js %}
 <script src="{{ url_for('static', filename = 'js/lumino.glyphs.js') }}"></script>
 <script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
+<!--forum js files-->
+<script src="{{ url_for('static', filename = 'js/fusioncharts/fusioncharts.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/fusioncharts/themes/fusioncharts.theme.fint.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/forum.js') }}"></script>
+<!--end of forum js files-->
 <script>
     $(function () {
         $("ul.css-tabs").tabs("div.css-panes > div", {effect: 'ajax'});
