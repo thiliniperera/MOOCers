@@ -199,4 +199,4 @@ test_results
 
 MSE <- sum((test_results - predict_nn)^2)/nrow(test_result)
 MSE
-
+#0.01676937451
