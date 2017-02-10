@@ -26,9 +26,6 @@ def courses():
 def platform():
     return render_template('platform.html')
 
-@app.route('/test')
-def test():
-    return render_template('child_page.html')
 
 @app.route('/learners')
 def learners():
@@ -55,7 +52,7 @@ def readDF():
     initialFile = 'static/assets/students.csv'
 
     df = pd.read_csv(initialFile, nrows=200)
-    return df.to_json()
+    return df.to_html()
 
 @app.route('/user')
 def getUser():

@@ -1,42 +1,30 @@
 {% extends "base_platform.html" %}
 {% block title %} Courses {% endblock %}
 {% block more_css %}
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
 {% endblock %}
 {% block content %}
-<div id="tabs">
-	<ul>
-		<li><a href="#tabs-1">Preloaded</a></li>
-		<li><a href="/learners">Tab 1</a></li>
-		<li><a href="https://jqueryui.com/resources/demos/tabs/ajax/content2.html">Tab 2</a></li>
-		<li><a href="https://jqueryui.com/resources/demos/tabs/ajax/content3-slow.php">Tab 3 (slow)</a></li>
-		<li><a href="https://jqueryui.com/resources/demos/tabs/ajax/content4-broken.php">Tab 4 (broken)</a></li>
-	</ul>
-	<div id="tabs-1">
-		<p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
-	</div>
+<ul class="css-tabs">
+  <li><a href="/csv">Tab 1</a></li>
+  <li><a href="/csv">Second tab</a></li>
+  <li><a href="/csv">An ultra long third tab</a></li>
+</ul>
+
+<!-- single pane. it is always visible -->
+<div class="css-panes">
+  <div style="display:block"></div>
 </div>
 {% endblock %}
 {% block more_js %}
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script>
-	$( function() {
-		$( "#tabs" ).tabs({
-			beforeLoad: function( event, ui ) {
-				ui.jqXHR.fail(function() {
-					ui.panel.html(
-						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
-						"If this wouldn't be a demo." );
-				});
-			}
-		});
-	} );
-	</script>
+  <script src="http://cdn.jquerytools.org/1.2.6/full/jquery.tools.min.js"></script>
 <script>
     $(function () {
-         $('.sidebar-links > a.link-yellow').addClass('selected');
+        $("ul.css-tabs").tabs("div.css-panes > div", {effect: 'ajax'});
+    });
+</script>
+<script>
+    $(function () {
+        $('.sidebar-links > a.link-yellow').addClass('selected');
     });
 </script>
 {% endblock %}
