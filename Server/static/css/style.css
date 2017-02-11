@@ -1,3 +1,13 @@
+/* END Form */
+body {
+  background: #ccc;
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
 /* Form */
 .form {
   position: relative;
@@ -110,14 +120,7 @@
   color: #EF3B3A;
 }
 
-/* END Form */
-/* Demo Purposes */
-body {
-  background: #ccc;
-  font-family: "Roboto", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+
 body:before {
   content: "";
   position: fixed;

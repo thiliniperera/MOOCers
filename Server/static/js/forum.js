@@ -1,9 +1,10 @@
 /**
  * Created by Thilini on 10-Feb-17.
  */
-alert("6tduygfj")
 
-$.getJSON('graphFile.json', function (data) {
+
+var displayForumScore=function () {
+$.getJSON('/json/assets/graphFile.json', function (data) {
 
     var items = new Array(10).fill(1);
     for (i = 0; i < data.nodes.length; i++) {
@@ -93,3 +94,6 @@ $.getJSON('graphFile.json', function (data) {
     });
 
 });
+}
+
+
