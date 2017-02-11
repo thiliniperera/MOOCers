@@ -10,6 +10,7 @@
     <title>{% block title %}{% endblock %}</title>
 
     <!--<link rel="stylesheet" href= "{{ url_for('static', filename = 'assets/demo.css') }}" >-->
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/sidebar-left.css') }}">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
@@ -24,10 +25,13 @@
     <a class="company-logo" href="#">Logo</a>
 
     <div class="sidebar-links">
-        <a class="link-blue " href="/platform"><i class="fa fa-tachometer"></i>Overview</a>
+        <a class="link-blue " href="/"><i class="fa fa-tachometer"></i>Overview</a>
         <a class="link-red" href="/learners"><i class="fa fa-users"></i>Learners</a>
         <a class="link-yellow" href="/courses"><i class="fa fa-book"></i>Courses</a>
-        <a class="link-green" href="#"><i class="fa fa-cog"></i>Settings</a>
+        <a class="link-green" href="/logout" style="  position: absolute;
+                                                bottom: 0;
+                                                width: 98%;
+                                                height: 100px; "><i class="fa fa-sign-out"></i>Sign out</a>
     </div>
 
 </aside>

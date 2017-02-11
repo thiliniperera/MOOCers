@@ -1,7 +1,7 @@
-body {
-    padding: 30px 80px;
-    font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana
-}
+/*body {*/
+    /*padding: 30px 80px;    */
+    /*font-family: "Roboto", sans-serif;*/
+/*}*/
 
 a:active {
     outline: none
@@ -59,7 +59,10 @@ ul.css-tabs a.current {
 
 .css-panes div {
     border-width: 0 1px 1px 1px;
-    min-height: 150px;
-    padding: 15px 20px;
+    /*min-height: 150px;*/
+    /*padding: 15px 20px;*/
     background-color: #fff
+}
+#ajax-content{
+    background: #ffffff;
 }

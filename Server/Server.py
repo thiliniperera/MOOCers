@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, render_template, request, redirect, url_for,send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from Settings import Configurations
 import pandas as pd
 import os
@@ -14,7 +14,7 @@ login_manager.init_app(app)
 # Our mock database.
 users = {'kasun': {'pw': 'pass'},
          'admin': {'pw': 'admin'},
-         'demo':{'pw':'demo'}}
+         'demo': {'pw': 'demo'}}
 
 
 class User(flask_login.UserMixin):
@@ -70,7 +70,7 @@ def protected():
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
-    return 'Logged out'
+    return redirect(url_for('login'))
 
 
 @login_manager.unauthorized_handler
@@ -108,8 +108,8 @@ def learners():
 @app.route('/learners/<userid>')
 @flask_login.login_required
 def getUserinfo(userid=None):
-    initialFile = 'static/assets/students.csv'
-    df = pd.read_csv(initialFile, nrows=200)
+    initial_file = 'static/assets/students.csv'
+    df = pd.read_csv(initial_file, nrows=200)
     # print df.irow(userid)
     return render_template('user.html', name=df.irow(userid))
 
@@ -127,6 +127,18 @@ def readDF():
 @flask_login.login_required
 def forum():
     return render_template('forum.html')
+
+@app.route('/course/dropout')
+@flask_login.login_required
+def dropout():
+    initialFile = 'static/assets/students.csv'
+    df = pd.read_csv(initialFile, nrows=200)
+
+    mylist = []
+    for index, row in df.iterrows():
+        an_item = dict(id=row['index'], name=row['name'], grade=row['grade'], location=row['location'], href=index)
+        mylist.append(an_item)
+    return render_template('course_dropouts.html',mylist=mylist)
 
 @app.route('/json/<path:path>')
 @flask_login.login_required

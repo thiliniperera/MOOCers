@@ -2,8 +2,9 @@
 {% block title %} Courses {% endblock %}
 {% block more_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
+<!--<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">-->
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/styles.css') }}">
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
 
@@ -80,7 +81,7 @@
 <ul id="nav" class="css-tabs">
     <li><a id="tab1" href="/csv">Tab 1</a></li>
     <li><a id="tab2" href="/forum">Forum</a></li>
-    <li><a id="tab3" href="/csv">An ultra long third tab</a></li>
+    <li><a id="tab3" href="/course/dropout">Dropouts</a></li>
 </ul>
 
 <!-- single pane. it is always visible -->
@@ -90,6 +91,8 @@
 {% endblock %}
 {% block more_js %}
 <script src="{{ url_for('static', filename = 'js/lumino.glyphs.js') }}"></script>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <!--forum js files-->
 <script src="{{ url_for('static', filename = 'js/fusioncharts/fusioncharts.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/fusioncharts/themes/fusioncharts.theme.fint.js') }}"></script>
