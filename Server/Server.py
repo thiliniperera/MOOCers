@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json
 from Settings import Configurations
 import pandas as pd
 import os
@@ -57,6 +57,8 @@ def login():
             user.id = uName
             flask_login.login_user(user)
             return redirect(url_for('platform'))
+        else:
+            return render_template('login.html', message='username or password mismatch!')
     except:
         return render_template('login.html', message='username or password mismatch!')
 
@@ -70,7 +72,7 @@ def protected():
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
-    return redirect(url_for('login'))
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 @login_manager.unauthorized_handler
@@ -128,6 +130,7 @@ def readDF():
 def forum():
     return render_template('forum.html')
 
+
 @app.route('/course/dropout')
 @flask_login.login_required
 def dropout():
@@ -138,12 +141,12 @@ def dropout():
     for index, row in df.iterrows():
         an_item = dict(id=row['index'], name=row['name'], grade=row['grade'], location=row['location'], href=index)
         mylist.append(an_item)
-    return render_template('course_dropouts.html',mylist=mylist)
+    return render_template('course_dropouts.html', mylist=mylist)
+
 
 @app.route('/json/<path:path>')
 @flask_login.login_required
 def send_json(path):
-    print path
     return send_from_directory(app.static_folder, path)
 
 
