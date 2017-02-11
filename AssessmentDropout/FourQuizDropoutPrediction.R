@@ -1,6 +1,11 @@
+
+#resource location
+activtyGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Education_EDUC115-S_Spring2014_ActivityGrade.csv"
+finalGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Education_EDUC115-S_Spring2014_FinalGrade.csv" 
+
 #read file
-newTrainData <- read.csv("E:/My Documents/1.ENGI/Semester 8/FYP/EDUC115/Education_EDUC115-S_Spring2014_ActivityGrade.csv")
-finalData <- read.csv("E:/My Documents/1.ENGI/Semester 8/FYP/EDUC115/Education_EDUC115-S_Spring2014_FinalGrade.csv")
+newTrainData <- read.csv(activtyGradeFile)
+finalData <- read.csv(finalGradeFile)
 summary(newTrainData)
 
 #Calculate duration
