@@ -2,7 +2,7 @@
  * Created by Kushan on 11-Feb-17.
  */
 
-var loadCommunityGraph = function() {
+var loadCommunityGraph = function () {
 
     var width = 960,
         height = 500,
@@ -13,8 +13,8 @@ var loadCommunityGraph = function() {
         .attr("height", height);
 
     var force = d3.layout.force()
-        .gravity(0.05)
-        .distance(10)
+        .gravity(0.5)
+        .distance(200)
         .charge(-100)
         .size([width, height]);
 
@@ -40,8 +40,7 @@ var loadCommunityGraph = function() {
         }
 
 
-        color = d3.scale.ordinal()
-            .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+        var color = d3.scale.category20();
 
 
         var link = svg.selectAll(".link")
@@ -95,4 +94,22 @@ var loadCommunityGraph = function() {
                 });
         });
     });
+
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
 }
