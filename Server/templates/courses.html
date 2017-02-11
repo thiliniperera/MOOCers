@@ -82,6 +82,7 @@
     <li><a id="tab1" href="/csv">Tab 1</a></li>
     <li><a id="tab2" href="/forum">Forum</a></li>
     <li><a id="tab3" href="/course/dropout">Dropouts</a></li>
+    <li><a id="tab4" href="/community">Communities</a></li>
 </ul>
 
 <!-- single pane. it is always visible -->
@@ -97,7 +98,11 @@
 <script src="{{ url_for('static', filename = 'js/fusioncharts/fusioncharts.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/fusioncharts/themes/fusioncharts.theme.fint.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/forum.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/community.js') }}"></script>
 <!--end of forum js files-->
+<!--community network js files-->
+<script type="text/javascript" src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<!--end of community network js files-->
 <script>
 
     $(document).ready(function () {
@@ -111,9 +116,13 @@
             $.ajax({
                 url: this.href, success: function (html) {
                     $("#ajax-content").empty().append(html);
-                 if ($("#nav li a.current").attr('id') === "tab2") {
-                     displayForumScore();
-                 }
+                    if ($("#nav li a.current").attr('id') === "tab2") {
+                        displayForumScore();
+                    }
+                    if ($("#nav li a.current").attr('id') === "tab4") {
+                        loadCommunityGraph();
+                    }
+
                 }
             });
             return false;

@@ -146,6 +146,11 @@ def send_json(path):
     print path
     return send_from_directory(app.static_folder, path)
 
+@app.route('/community')
+@flask_login.login_required
+def community():
+    return render_template('community.html')
+
 
 if __name__ == '__main__':
     app.run()
