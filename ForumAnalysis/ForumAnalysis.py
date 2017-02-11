@@ -81,7 +81,7 @@ for row in edge_list:
     weight = 1
     response['links'].append({'source': source, 'target': target, 'weight': weight})
 
-with open('C://Users//Kushan//Documents//FYP Jan//MOOCers//Server//static//json//nodes.json', 'w') as fp:
+with open('C://Users//Kushan//Documents//FYP Jan//MOOCers//Server//static//assets//nodes.json', 'w') as fp:
     json.dump(response, fp)
 
 scoreDF.hist()
