@@ -24,16 +24,16 @@
 </div>
 <div class="form">
     <div class="thumbnail"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/hat.svg"/></div>
-    <form class="register-form">
-        <input type="text" placeholder="name"/>
-        <input type="password" placeholder="password"/>
-        <input type="text" placeholder="email address"/>
+    <form class="register-form" action="/register" method="post">
+        <input type="text" name="email"  placeholder="email"/>
+        <input type="password" name="password" placeholder="password"/>
+        <input type="password" name="password" placeholder="confirm password"/>
         <button>create</button>
         <p class="message">Already registered? <a href="#">Sign In</a></p>
     </form>
     <form class="login-form" action="/login" method="post">
         <p class="message error">{{message}}</p>
-        <input name="username" type="text" placeholder="username"/>
+        <input name="email" type="text" placeholder="email"/>
         <input name="password" type="password" placeholder="password"/>
         <button type="submit" >login</button>
         <p class="message">Not registered? <a href="#">Create an account</a></p>

@@ -3,6 +3,8 @@
 {% block more_css %}
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaner_style.css') }}">
+
 {% endblock %}
 {% block content %}
 <div class="container">
@@ -22,7 +24,7 @@
         {% for n in mylist %}
         <a href="#">
             <tr>
-                <td><a href="learners/{{n.href}}">{{n.id}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners()">{{n.id}}</a></td>
                 <td><a href="learners/{{n.href}}">{{n.name}}</a></td>
                 <td><a href="learners/{{n.href}}">{{n.grade}}</a></td>
                 <td><a href="learners/{{n.href}}">{{n.location}}</a></td>
@@ -48,7 +50,11 @@
     });
     
     var displayLearners = function () {
-        
+            $.ajax({url: "/user_profile", success: function(result){
+        $('body').append(result);
+                document.getElementById('learner').style.display='block';
+                document.getElementById('fade').style.display='block';
+    }});
     }
 </script>
 {% endblock %}
