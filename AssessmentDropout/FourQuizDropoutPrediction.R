@@ -180,6 +180,7 @@ half <- round(nrow(result_table_total)/2)
 train_result <- result_table_total[1:half,]
 summary(train_result)
 test_result <- result_table_total[nrow(result_table_total)- half:nrow(result_table_total),]
+test_result
 
 library(neuralnet)
 result_nn=neuralnet(train_result$actual~train_result$prediction_Q1+train_result$prediction_Q2+train_result$prediction_Q3+train_result$prediction_Q4,train_result,hidden=2,err.fct = "sse",linear.output = FALSE)
@@ -191,6 +192,20 @@ result_nn$weights
 results_grade_all <- compute(result_nn, covariate = matrix(c(test_result$prediction_Q1,test_result$prediction_Q2,test_result$prediction_Q3,test_result$prediction_Q4),byrow = TRUE,ncol = 4))
 results_grade_all$net.result
 plot(results_grade4$net.result)
+
+#Add rediction column to result set
+prediction <- c(results_grade_all$net.result)
+test_result_2 <-test_result
+test_result_2$prediction <- prediction
+
+#accuracy
+
+
+# Write CSV in R
+write.csv(test_result_2, file = "//home/chamil/Documents/work/MOOCers-master/AssessmentDropout/MyData.csv")
+
+#read results
+written_results = read.csv("/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/MyData.csv")
 
 
 #Calculate Error
