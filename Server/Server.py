@@ -51,7 +51,7 @@ def login():
         return render_template('login.html')
 
     try:
-        uName = request.form['username']
+        uName = request.form['email']
         if request.form['password'] == users[uName]['pw']:
             user = User()
             user.id = uName
