@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json
 from Settings import Configurations
 import pandas as pd
 import os
@@ -16,6 +16,8 @@ users = {'kasun': {'pw': 'pass'},
          'admin': {'pw': 'admin'},
          'demo': {'pw': 'demo'}}
 
+initialFile = 'static/assets/students.csv'
+df = pd.read_csv(initialFile, nrows=200)
 
 class User(flask_login.UserMixin):
     pass
@@ -51,12 +53,14 @@ def login():
         return render_template('login.html')
 
     try:
-        uName = request.form['email']
+        uName = request.form['username']
         if request.form['password'] == users[uName]['pw']:
             user = User()
             user.id = uName
             flask_login.login_user(user)
             return redirect(url_for('platform'))
+        else:
+            return render_template('login.html', message='username or password mismatch!')
     except:
         return render_template('login.html', message='username or password mismatch!')
 
@@ -70,7 +74,7 @@ def protected():
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
-    return redirect(url_for('login'))
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 @login_manager.unauthorized_handler
@@ -93,25 +97,25 @@ def platform():
 @app.route('/learners')
 @flask_login.login_required
 def learners():
-    initialFile = 'static/assets/students.csv'
-    df = pd.read_csv(initialFile, nrows=200)
 
     mylist = []
     for index, row in df.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['grade'], location=row['location'], href=index)
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'], href=index)
         mylist.append(an_item)
     # df=df.apply(lambda x: '<a href="http://example.com/{0}">link</a>'.format(x))
     # print mylist
     return render_template('learners.html', mylist=mylist)
 
 
-@app.route('/learners/<userid>')
+@app.route('/user_profile/<userid>')
 @flask_login.login_required
 def getUserinfo(userid=None):
-    initial_file = 'static/assets/students.csv'
-    df = pd.read_csv(initial_file, nrows=200)
     # print df.irow(userid)
-    return render_template('user.html', name=df.irow(userid))
+    row=df.irow(userid)
+
+    return render_template('learner_profile.html', name=row['name'], performance=row['performance'], dropout=row['dropout_status'],
+                           location=row['location'], forum_score=row['forum_score'],
+                           gender=row['gender'],year_of_birth=row['year_of_birth'], level_of_education=row['level_of_education'])
 
 
 @app.route('/csv')
@@ -128,6 +132,7 @@ def readDF():
 def forum(courseid):
     return render_template('forum.html')
 
+
 @app.route('/course/dropout/<courseid>')
 @flask_login.login_required
 def dropout(courseid):
@@ -138,12 +143,12 @@ def dropout(courseid):
     for index, row in df.iterrows():
         an_item = dict(id=row['index'], name=row['name'], grade=row['grade'], location=row['location'], href=index)
         mylist.append(an_item)
-    return render_template('course_dropouts.html',mylist=mylist)
+    return render_template('course_dropouts.html', mylist=mylist)
+
 
 @app.route('/json/<path:path>')
 @flask_login.login_required
 def send_json(path):
-    print path
     return send_from_directory(app.static_folder, path)
 
 @app.route('/community/<courseid>')

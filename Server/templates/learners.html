@@ -16,18 +16,17 @@
         <tr>
             <th>Index</th>
             <th>Name</th>
-            <th>Performance</th>
-            <th>Location</th>
+            <th>Predicted Performance</th>
+            <th>Predicted dropout probability</th>
         </tr>
         </thead>
         <tbody>
         {% for n in mylist %}
-        <a href="#">
             <tr>
-                <td><a href="javascript:void(0)" onclick="displayLearners()">{{n.id}}</a></td>
-                <td><a href="learners/{{n.href}}">{{n.name}}</a></td>
-                <td><a href="learners/{{n.href}}">{{n.grade}}</a></td>
-                <td><a href="learners/{{n.href}}">{{n.location}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.id}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.name}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.grade*100}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.dropout}}</a></td>
             </tr>
             {%- endfor %}
         </tbody>
@@ -46,15 +45,17 @@
 
 <script>
     $(function () {
-         $('.sidebar-links > a.link-red').addClass('selected');
+        $('.sidebar-links > a.link-red').addClass('selected');
     });
-    
-    var displayLearners = function () {
-            $.ajax({url: "/user_profile", success: function(result){
-        $('body').append(result);
-                document.getElementById('learner').style.display='block';
-                document.getElementById('fade').style.display='block';
-    }});
+
+    var displayLearners = function (userID) {
+        $.ajax({
+            url: "/user_profile/" + userID, success: function (result) {
+                $('#fade').html(result);
+                document.getElementById('learner').style.display = 'block';
+                document.getElementById('fade').style.display = 'block';
+            }
+        });
     }
 </script>
 {% endblock %}

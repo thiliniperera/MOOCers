@@ -25,7 +25,7 @@
 <div class="form">
     <div class="thumbnail"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/hat.svg"/></div>
     <form class="register-form" action="/register" method="post">
-        <input type="text" name="email"  placeholder="email"/>
+        <input type="text" name="username"  placeholder="username"/>
         <input type="password" name="password" placeholder="password"/>
         <input type="password" name="password" placeholder="confirm password"/>
         <button>create</button>
@@ -33,7 +33,7 @@
     </form>
     <form class="login-form" action="/login" method="post">
         <p class="message error">{{message}}</p>
-        <input name="email" type="text" placeholder="email"/>
+        <input name="username" type="text" placeholder="username"/>
         <input name="password" type="password" placeholder="password"/>
         <button type="submit" >login</button>
         <p class="message">Not registered? <a href="#">Create an account</a></p>
