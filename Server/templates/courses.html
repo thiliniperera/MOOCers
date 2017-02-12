@@ -107,6 +107,8 @@
 <!--end of community network js files-->
 <script>
 
+    var course_id = 0;
+
     $(document).ready(function () {
         $("#nav li a").click(function () {
 
@@ -114,9 +116,9 @@
             $("#nav li a").removeClass('current');
             $(this).addClass('current');
 
-
             $.ajax({
-                url: this.href, success: function (html) {
+                url: this.href+"/"+course_id,
+                success: function (html) {
                     $("#ajax-content").empty().append(html);
                     if ($("#nav li a.current").attr('id') === "tab2") {
                         displayForumScore();
@@ -125,6 +127,9 @@
                         loadCommunityGraph();
                     }
 
+                },
+                error: function (error) {
+                    alert("error");
                 }
             });
             return false;

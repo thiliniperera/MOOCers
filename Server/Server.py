@@ -123,14 +123,14 @@ def readDF():
     return df.to_html()
 
 
-@app.route('/forum')
+@app.route('/forum/<courseid>')
 @flask_login.login_required
-def forum():
+def forum(courseid):
     return render_template('forum.html')
 
-@app.route('/course/dropout')
+@app.route('/course/dropout/<courseid>')
 @flask_login.login_required
-def dropout():
+def dropout(courseid):
     initialFile = 'static/assets/students.csv'
     df = pd.read_csv(initialFile, nrows=200)
 
@@ -146,9 +146,9 @@ def send_json(path):
     print path
     return send_from_directory(app.static_folder, path)
 
-@app.route('/community')
+@app.route('/community/<courseid>')
 @flask_login.login_required
-def community():
+def community(courseid):
     return render_template('community.html')
 
 

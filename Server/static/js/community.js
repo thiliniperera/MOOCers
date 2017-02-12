@@ -19,7 +19,7 @@ var loadCommunityGraph = function () {
         .size([width, height]);
 
 
-    d3.json('/json/assets/nodes.json', function (json) {
+    d3.json('/json/assets/nodes_'+course_id+'.json', function (json) {
         force
             .nodes(json.nodes)
             .links(json.links)
