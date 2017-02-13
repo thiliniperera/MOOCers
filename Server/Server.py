@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json
-from Settings import Configurations
+from dateutil.parser import parse
 import pandas as pd
 import os
 import flask_login
@@ -16,8 +16,12 @@ users = {'kasun': {'pw': 'pass'},
          'admin': {'pw': 'admin'},
          'demo': {'pw': 'demo'}}
 
-initialFile = 'static/assets/students.csv'
-df = pd.read_csv(initialFile, nrows=200)
+student_csv = 'static/assets/students.csv'
+student_df = pd.read_csv(student_csv)
+
+course_csv = 'static/assets/course.csv'
+course_df = pd.read_csv(course_csv)
+
 
 class User(flask_login.UserMixin):
     pass
@@ -91,7 +95,20 @@ def courses():
 @app.route('/')
 @flask_login.login_required
 def platform():
-    return render_template('platform.html')
+    # name, term, starting_date, ending_date, no_of_students, no_of_videos, no_of_assignments
+    mylist = []
+    for index, row in course_df.iterrows():
+        course_name = str(row['name'])+" , "+row['term']+" "+str(parse(str(row['starting_date'])).year)
+        an_item = dict(id=index, starting_date=row['starting_date'],
+                       ending_date=row['ending_date'],
+                       no_of_students=row['no_of_students'],
+                       no_of_videos=row['no_of_videos'],
+                       no_of_assignments=row['no_of_assignments'],
+                       name=course_name,
+                       students_at_risk= 350
+                       )
+        mylist.append(an_item)
+    return render_template('platform.html', course_list=mylist)
 
 
 @app.route('/learners')
@@ -99,11 +116,10 @@ def platform():
 def learners():
 
     mylist = []
-    for index, row in df.iterrows():
+    for index, row in student_df.iterrows():
         an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'], href=index)
         mylist.append(an_item)
-    # df=df.apply(lambda x: '<a href="http://example.com/{0}">link</a>'.format(x))
-    # print mylist
+
     return render_template('learners.html', mylist=mylist)
 
 
@@ -111,7 +127,7 @@ def learners():
 @flask_login.login_required
 def getUserinfo(userid=None):
     # print df.irow(userid)
-    row=df.irow(userid)
+    row=student_df.irow(userid)
 
     return render_template('learner_profile.html', name=row['name'], performance=row['performance'], dropout=row['dropout_status'],
                            location=row['location'], forum_score=row['forum_score'],
@@ -136,12 +152,9 @@ def forum(courseid):
 @app.route('/course/dropout/<courseid>')
 @flask_login.login_required
 def dropout(courseid):
-    initialFile = 'static/assets/students.csv'
-    df = pd.read_csv(initialFile, nrows=200)
-
     mylist = []
-    for index, row in df.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['grade'], location=row['location'], href=index)
+    for index, row in student_df[student_df['dropout_status']==1].iterrows():
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'], href=index)
         mylist.append(an_item)
     return render_template('course_dropouts.html', mylist=mylist)
 

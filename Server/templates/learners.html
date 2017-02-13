@@ -4,13 +4,48 @@
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaner_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/styles.css') }}">
 
 {% endblock %}
 {% block content %}
 <div class="container">
     <div class="row header" style="text-align:center">
-        <h3>Student Directory</h3>
+        <h1>Learner Personas</h1>
     </div>
+    <div class="row " style="text-align:center">
+        <h4>20030 total records</h4>
+    </div>
+
+
+		<div class="row">
+			<div class="col-xs-6 col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Students in current courses : 13000</h4>
+						<div class="easypiechart" id="easypiechart-blue" data-percent="67" ><span class="percent">67%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Isolated Students : 6000</h4>
+						<div class="easypiechart" id="easypiechart-teal" data-percent="45" ><span class="percent">45%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel">
+						<h4>Students at Risk : 5400</h4>
+						<div class="easypiechart" id="easypiechart-red" data-percent="37" ><span class="percent">37%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
     <table id="myTable" class="table table-striped">
         <thead>
         <tr>
@@ -36,7 +71,10 @@
 {% endblock %}
 {% block more_js %}
 <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script><script src="{{ url_for('static', filename = 'js/community.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/easypiechart.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/easypiechart-data.js') }}"></script>
+
 <script>
     $(document).ready(function () {
         $('#myTable').dataTable();

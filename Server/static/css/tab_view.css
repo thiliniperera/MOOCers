@@ -65,4 +65,11 @@ ul.css-tabs a.current {
 }
 #ajax-content{
     background: #ffffff;
+    padding: 20px;
+    box-shadow: 0px 0px 1px 0px rgba(68, 68, 68, 0.35);
+}
+
+#dropout-title{
+    color: darkgoldenrod;
+    padding: 20px;
 }

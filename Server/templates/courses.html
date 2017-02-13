@@ -117,15 +117,19 @@
             $(this).addClass('current');
 
             $.ajax({
-                url: this.href+"/"+course_id,
+                url: this.href + "/" + course_id,
                 success: function (html) {
                     $("#ajax-content").empty().append(html);
                     if ($("#nav li a.current").attr('id') === "tab2") {
                         displayForumScore();
                     }
-                    if ($("#nav li a.current").attr('id') === "tab4") {
+                    else if ($("#nav li a.current").attr('id') === "tab3") {
+                        $('#myTable').dataTable();
+                    }
+                    else if ($("#nav li a.current").attr('id') === "tab4") {
                         loadCommunityGraph();
                     }
+
 
                 },
                 error: function (error) {
@@ -151,5 +155,14 @@
     $(function () {
         $('.sidebar-links > a.link-yellow').addClass('selected');
     });
+    var displayLearners = function (userID) {
+        $.ajax({
+            url: "/user_profile/" + userID, success: function (result) {
+                $('#fade').html(result);
+                document.getElementById('learner').style.display = 'block';
+                document.getElementById('fade').style.display = 'block';
+            }
+        });
+    }
 </script>
 {% endblock %}

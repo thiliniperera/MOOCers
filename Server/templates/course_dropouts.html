@@ -1,25 +1,24 @@
 <div class="row header" style="text-align:center;margin-left: 0;margin-right: 0;">
-    <h2>These students are likely to drop out</h2>
+    <h2 id="dropout-title">These students are likely to drop out</h2>
 </div>
 <table id="myTable" class="table table-striped">
     <thead>
     <tr>
         <th>Index</th>
         <th>Name</th>
-        <th>Performance</th>
-        <th>Location</th>
+        <th>Predicted Performance</th>
+        <th>Predicted dropout probability</th>
     </tr>
     </thead>
     <tbody>
     {% for n in mylist %}
-    <a href="#">
-        <tr>
-            <td><a href="learners/{{n.href}}">{{n.id}}</a></td>
-            <td><a href="learners/{{n.href}}">{{n.name}}</a></td>
-            <td><a href="learners/{{n.href}}">{{n.grade}}</a></td>
-            <td><a href="learners/{{n.href}}">{{n.location}}</a></td>
-        </tr>
-        {%- endfor %}
+    <tr>
+        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.id}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.name}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.grade*100}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.dropout}}</a></td>
+    </tr>
+    {%- endfor %}
     </tbody>
 </table>
 
