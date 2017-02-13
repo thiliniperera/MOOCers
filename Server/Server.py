@@ -72,8 +72,11 @@ def login():
 @app.route('/search', methods=['POST'])
 @flask_login.login_required
 def search():
+    query = request.form['query']
+    search_result=student_df[student_df['name'].str.contains(query) ]
+    # or student_df['index'].str.contains(query)
     mylist = []
-    for index, row in student_df.iterrows():
+    for index, row in search_result.iterrows():
         an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
                        href=index)
         mylist.append(an_item)
