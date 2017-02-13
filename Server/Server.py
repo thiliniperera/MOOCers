@@ -69,10 +69,20 @@ def login():
         return render_template('login.html', message='username or password mismatch!')
 
 
-@app.route('/protected')
+@app.route('/search', methods=['POST'])
 @flask_login.login_required
-def protected():
-    return 'Logged in as: ' + flask_login.current_user.id
+def search():
+    query = request.form['query']
+    search_result=student_df[student_df['name'].str.contains(pat=query,case=False)]
+
+    # or student_df['index'].str.contains(query)
+    mylist = []
+    for index, row in search_result.iterrows():
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
+                       href=index)
+        mylist.append(an_item)
+
+    return render_template('search_result.html', mylist=mylist)
 
 
 @app.route('/logout')
@@ -86,10 +96,15 @@ def unauthorized_handler():
     return redirect(url_for('login'))
 
 
-@app.route('/courses')
+@app.route('/courses/<course_id>')
 @flask_login.login_required
-def courses():
-    return render_template('courses.html')
+def courses(course_id=None):
+    if (int(course_id) >= len(course_df)):
+        course_id = 0
+    row = course_df.irow(course_id)
+    course_name = str(row['name']) + " , " + row['term'] + " " + str(parse(str(row['starting_date'])).year)
+    return render_template('courses.html', no_of_students=row['no_of_students'], no_of_videos=row['no_of_videos'],
+                           no_of_assignments=row['no_of_assignments'],name = course_name)
 
 
 @app.route('/')
@@ -98,14 +113,14 @@ def platform():
     # name, term, starting_date, ending_date, no_of_students, no_of_videos, no_of_assignments
     mylist = []
     for index, row in course_df.iterrows():
-        course_name = str(row['name'])+" , "+row['term']+" "+str(parse(str(row['starting_date'])).year)
+        course_name = str(row['name']) + " , " + row['term'] + " " + str(parse(str(row['starting_date'])).year)
         an_item = dict(id=index, starting_date=row['starting_date'],
                        ending_date=row['ending_date'],
                        no_of_students=row['no_of_students'],
                        no_of_videos=row['no_of_videos'],
                        no_of_assignments=row['no_of_assignments'],
                        name=course_name,
-                       students_at_risk= 350
+                       students_at_risk=350
                        )
         mylist.append(an_item)
     return render_template('platform.html', course_list=mylist)
@@ -114,10 +129,10 @@ def platform():
 @app.route('/learners')
 @flask_login.login_required
 def learners():
-
     mylist = []
     for index, row in student_df.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'], href=index)
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
+                       href=index)
         mylist.append(an_item)
 
     return render_template('learners.html', mylist=mylist)
@@ -127,20 +142,19 @@ def learners():
 @flask_login.login_required
 def getUserinfo(userid=None):
     # print df.irow(userid)
-    row=student_df.irow(userid)
+    row = student_df.irow(userid)
 
-    return render_template('learner_profile.html', name=row['name'], performance=row['performance'], dropout=row['dropout_status'],
+    return render_template('learner_profile.html', name=row['name'], performance=row['performance'],
+                           dropout=row['dropout_status'],
                            location=row['location'], forum_score=row['forum_score'],
-                           gender=row['gender'],year_of_birth=row['year_of_birth'], level_of_education=row['level_of_education'])
+                           gender=row['gender'], year_of_birth=row['year_of_birth'],
+                           level_of_education=row['level_of_education'])
 
 
 @app.route('/csv/<course_id>')
 @flask_login.login_required
 def readDF(course_id=0):
-    initialFile = 'static/assets/students.csv'
-
-    df = pd.read_csv(initialFile, nrows=200)
-    return df.to_html()
+    return student_df.to_html()
 
 
 @app.route('/forum/<courseid>')
@@ -153,8 +167,9 @@ def forum(courseid):
 @flask_login.login_required
 def dropout(courseid):
     mylist = []
-    for index, row in student_df[student_df['dropout_status']==1].iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'], href=index)
+    for index, row in student_df[student_df['dropout_status'] == 1].iterrows():
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
+                       href=index)
         mylist.append(an_item)
     return render_template('course_dropouts.html', mylist=mylist)
 
@@ -163,6 +178,7 @@ def dropout(courseid):
 @flask_login.login_required
 def send_json(path):
     return send_from_directory(app.static_folder, path)
+
 
 @app.route('/community/<courseid>')
 @flask_login.login_required
