@@ -81,10 +81,9 @@
     </div>
 </div><!--/.row-->
 <ul id="nav" class="css-tabs">
-    <li><a id="tab1" href="/csv">Tab 1</a></li>
-    <li><a id="tab2" href="/forum">Forum</a></li>
-    <li><a id="tab3" href="/course/dropout">Dropouts</a></li>
-    <li><a id="tab4" href="/community">Communities</a></li>
+    <li><a id="tab1" class="current" href="/forum">Forum</a></li>
+    <li><a id="tab2" href="/course/dropout">Dropouts</a></li>
+    <li><a id="tab3" href="/community">Communities</a></li>
 </ul>
 
 <!-- single pane. it is always visible -->
@@ -120,13 +119,13 @@
                 url: this.href + "/" + course_id,
                 success: function (html) {
                     $("#ajax-content").empty().append(html);
-                    if ($("#nav li a.current").attr('id') === "tab2") {
+                    if ($("#nav li a.current").attr('id') === "tab1") {
                         displayForumScore();
                     }
-                    else if ($("#nav li a.current").attr('id') === "tab3") {
+                    else if ($("#nav li a.current").attr('id') === "tab2") {
                         $('#myTable').dataTable();
                     }
-                    else if ($("#nav li a.current").attr('id') === "tab4") {
+                    else if ($("#nav li a.current").attr('id') === "tab3") {
                         loadCommunityGraph();
                     }
 
@@ -140,13 +139,14 @@
         });
 
         $("#ajax-content").empty();
-        $.ajax({
-            url: '/csv/0', success: function (html) {
-                $("#ajax-content").empty().append(html);
-                $("#nav li a").first().addClass('current');
-
-            }
-        });
+        $( ".current" ).click();
+//        $.ajax({
+//            url: '/csv/0', success: function (html) {
+//                $("#ajax-content").empty().append(html);
+//                $("#nav li a").first().addClass('current');
+//
+//            }
+//        });
     });
 
 
