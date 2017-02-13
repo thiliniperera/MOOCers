@@ -143,11 +143,14 @@ def learners():
 def getUserinfo(userid=None):
     # print df.irow(userid)
     row = student_df.irow(userid)
+    gender='Male'
+    if(row['gender']=='f'):
+        gender ='Female'
 
     return render_template('learner_profile.html', name=row['name'], performance=row['performance'],
                            dropout=row['dropout_status'],
                            location=row['location'], forum_score=row['forum_score'],
-                           gender=row['gender'], year_of_birth=row['year_of_birth'],
+                           gender=gender, year_of_birth=row['year_of_birth'],
                            level_of_education=row['level_of_education'])
 
 
