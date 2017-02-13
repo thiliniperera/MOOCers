@@ -73,7 +73,8 @@ def login():
 @flask_login.login_required
 def search():
     query = request.form['query']
-    search_result=student_df[student_df['name'].str.contains(query) ]
+    search_result=student_df[student_df['name'].str.contains(pat=query,case=False)]
+
     # or student_df['index'].str.contains(query)
     mylist = []
     for index, row in search_result.iterrows():

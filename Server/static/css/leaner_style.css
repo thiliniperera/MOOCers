@@ -56,3 +56,10 @@ td {
     border-radius: 0px 5px 5px 0px;
     cursor: pointer;
 }
+
+.dataTables_info, .dataTables_length {
+    float:left;
+    width:auto;
+    padding-right:15px;
+}
+
