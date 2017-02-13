@@ -1,15 +1,85 @@
 {% extends "base_platform.html" %}
 {% block title %} Platform {% endblock %}
 {% block more_css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/platform_overview_style.css') }}">
 {% endblock %}
 {% block content %}
+<div>
+    <div class="row">
+        <h1>Your Courses</h1>
+    </div>
+</div>
 
+<div>
+    <div class="row course-title">
+        <h3>Engineering Summer, 2014</h3>
+    </div>
+    <div class=" row course_element">
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="col-lg-12">
+            <div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+                         aria-valuenow="50"
+                         aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                        50% Complete
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="row course-title">
+        <h3>Engineering Summer, 2014</h3>
+    </div>
+    <div class=" row course_element">
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-6 col-lg-6">
+            <p>Number of students : 7000</p>
+        </div>
+        <div class="col-lg-12">
+            <div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+                         aria-valuenow="50"
+                         aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                        50% Complete
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block more_js %}
 
 <script>
     $(function () {
-         $('.sidebar-links > a.link-blue').addClass('selected');
+        $('.sidebar-links > a.link-blue').addClass('selected');
     });
 </script>
 {% endblock %}
