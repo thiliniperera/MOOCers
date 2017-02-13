@@ -13,13 +13,13 @@ var loadCommunityGraph = function () {
         .attr("height", height);
 
     var force = d3.layout.force()
-        .gravity(0.5)
-        .distance(200)
-        .charge(-100)
+        .gravity(.05)
+        .charge(-240)
+        .linkDistance(100)
         .size([width, height]);
 
 
-    d3.json('/json/assets/nodes_'+course_id+'.json', function (json) {
+    d3.json('/json/assets/nodes_' + course_id + '.json', function (json) {
         force
             .nodes(json.nodes)
             .links(json.links)
@@ -59,10 +59,16 @@ var loadCommunityGraph = function () {
 
         node.append("circle")
             .attr("r", function (d) {
-                return (((d.degree - min) / (max - min)) * (10 - 6)) + 6
+                if (d.degree == 0)
+                    return 0
+                else
+                    return (((d.degree - min) / (max - min)) * (20 - 6)) + 6
             })
             .attr("fill", function (d) {
-                return color(d.group)
+                if (d.degree == 0)
+                    return
+                else
+                    return color(d.group)
             });
 
         node.append("text")
@@ -71,6 +77,7 @@ var loadCommunityGraph = function () {
             .text(function (d) {
                 return
             });
+
 
         force.on("tick", function () {
             svg.selectAll("g.node")
@@ -92,8 +99,47 @@ var loadCommunityGraph = function () {
                 .attr("y2", function (d) {
                     return d.target.y;
                 });
+            node.attr("cx", function (d) {
+                return d.x;
+            })
+                .attr("cy", function (d) {
+                    return d.y;
+                });
+            node.each(collide(0.5)); //Added
         });
+
+        var padding = 1, // separation between circles
+            radius = 8;
+
+        function collide(alpha) {
+            var quadtree = d3.geom.quadtree(json.nodes);
+            return function (d) {
+                var rb = 2 * radius + padding,
+                    nx1 = d.x - rb,
+                    nx2 = d.x + rb,
+                    ny1 = d.y - rb,
+                    ny2 = d.y + rb;
+                quadtree.visit(function (quad, x1, y1, x2, y2) {
+                    if (quad.point && (quad.point !== d)) {
+                        var x = d.x - quad.point.x,
+                            y = d.y - quad.point.y,
+                            l = Math.sqrt(x * x + y * y);
+                        if (l < rb) {
+                            l = (l - rb) / l * alpha;
+                            d.x -= x *= l;
+                            d.y -= y *= l;
+                            quad.point.x += x;
+                            quad.point.y += y;
+                        }
+                    }
+                    return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+                });
+            };
+        }
+
+
     });
+
 
     function dragstarted(d) {
         if (!d3.event.active) simulation.alphaTarget(0.3).restart();
