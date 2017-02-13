@@ -4,6 +4,7 @@
 
 var loadCommunityGraph = function () {
 
+
     var width = 960,
         height = 500,
         radius = 10;
@@ -11,6 +12,14 @@ var loadCommunityGraph = function () {
     var svg = d3.select("#network-graph").append("svg")
         .attr("width", width)
         .attr("height", height);
+    //Set up tooltip
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+            return d.user_id + "";
+        });
+    svg.call(tip);
 
     var force = d3.layout.force()
         .gravity(.05)
@@ -55,7 +64,9 @@ var loadCommunityGraph = function () {
             .data(json.nodes)
             .enter().append("g")
             .attr("class", "node")
-            .call(force.drag);
+            .call(force.drag)
+            .on('mouseover', tip.show) //Added
+            .on('mouseout', tip.hide); //Added ;
 
         node.append("circle")
             .attr("r", function (d) {
