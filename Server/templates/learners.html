@@ -13,71 +13,78 @@
         <h1>Learner Personas</h1>
     </div>
     <div class="row " style="text-align:center">
-        <h4>20030 total records</h4>
+        <h4 style="    margin-bottom: 30px; color: darkgray">20030 total records</h4>
     </div>
 
 
-		<div class="row">
-			<div class="col-xs-6 col-md-4">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>Students in current courses : 13000</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="67" ><span class="percent">67%</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-6 col-md-4">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>Isolated Students : 6000</h4>
-						<div class="easypiechart" id="easypiechart-teal" data-percent="45" ><span class="percent">45%</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-6 col-md-4">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>Students at Risk : 5400</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="37" ><span class="percent">37%</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!--/.row-->
-    <table id="myTable" class="table table-striped">
-        <thead>
-        <tr>
-            <th>Index</th>
-            <th>Name</th>
-            <th>Predicted Performance</th>
-            <th>Predicted dropout probability</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for n in mylist %}
-            <tr>
-                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.id}}</a></td>
-                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.name}}</a></td>
-                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.grade*100}}</a></td>
-                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.dropout}}</a></td>
-            </tr>
-            {%- endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-xs-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Students in current courses : 13000</h4>
+                    <div class="easypiechart" id="easypiechart-blue" data-percent="67"><span class="percent">67%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Isolated Students : 6000</h4>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="45"><span class="percent">45%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Students at Risk : 5400</h4>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="37"><span class="percent">37%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/.row-->
+    <div id='search-box'>
+        <form action='/search' id='search-form' method='get' target='_top'>
+            <input id='search-text' name='q' placeholder='Search for a learner persona by name or id' type='text'/>
+            <button id='search-button' type='submit'>
+                <span>Search</span>
+            </button>
+        </form>
+    </div>
+
+
+    <div id="ajax-search-result"></div>
 
 </div>
 {% endblock %}
 {% block more_js %}
 <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script><script src="{{ url_for('static', filename = 'js/community.js') }}"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/community.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/easypiechart.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/easypiechart-data.js') }}"></script>
 
 <script>
-    $(document).ready(function () {
-        $('#myTable').dataTable();
+    //    $(document).ready(function () {
+    //        $('#myTable').dataTable();
+    //    });
+
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (data) {
+                $("#ajax-search-result").empty().append(data).css('visibility', 'visible');
+                $('#myTable').dataTable();
+            }
+        });
+
     });
 </script>
 
