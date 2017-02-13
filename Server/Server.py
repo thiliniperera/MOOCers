@@ -134,9 +134,9 @@ def getUserinfo(userid=None):
                            gender=row['gender'],year_of_birth=row['year_of_birth'], level_of_education=row['level_of_education'])
 
 
-@app.route('/csv')
+@app.route('/csv/<course_id>')
 @flask_login.login_required
-def readDF():
+def readDF(course_id=0):
     initialFile = 'static/assets/students.csv'
 
     df = pd.read_csv(initialFile, nrows=200)

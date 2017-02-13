@@ -141,7 +141,7 @@
 
         $("#ajax-content").empty();
         $.ajax({
-            url: '/csv', success: function (html) {
+            url: '/csv/0', success: function (html) {
                 $("#ajax-content").empty().append(html);
                 $("#nav li a").first().addClass('current');
 
