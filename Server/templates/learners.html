@@ -3,6 +3,8 @@
 {% block more_css %}
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/leaner_style.css') }}">
+
 {% endblock %}
 {% block content %}
 <div class="container">
@@ -14,18 +16,17 @@
         <tr>
             <th>Index</th>
             <th>Name</th>
-            <th>Performance</th>
-            <th>Location</th>
+            <th>Predicted Performance</th>
+            <th>Predicted dropout probability</th>
         </tr>
         </thead>
         <tbody>
         {% for n in mylist %}
-        <a href="#">
             <tr>
-                <td><a href="learners/{{n.href}}">{{n.id}}</a></td>
-                <td><a href="learners/{{n.href}}">{{n.name}}</a></td>
-                <td><a href="learners/{{n.href}}">{{n.grade}}</a></td>
-                <td><a href="learners/{{n.href}}">{{n.location}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.id}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.name}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.grade*100}}</a></td>
+                <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.dropout}}</a></td>
             </tr>
             {%- endfor %}
         </tbody>
@@ -44,7 +45,17 @@
 
 <script>
     $(function () {
-         $('.sidebar-links > a.link-red').addClass('selected');
+        $('.sidebar-links > a.link-red').addClass('selected');
     });
+
+    var displayLearners = function (userID) {
+        $.ajax({
+            url: "/user_profile/" + userID, success: function (result) {
+                $('#fade').html(result);
+                document.getElementById('learner').style.display = 'block';
+                document.getElementById('fade').style.display = 'block';
+            }
+        });
+    }
 </script>
 {% endblock %}
