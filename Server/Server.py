@@ -78,7 +78,12 @@ def search():
     # or student_df['index'].str.contains(query)
     mylist = []
     for index, row in search_result.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
+        dropout = row['dropout_status']
+        if (int(dropout) == 1):
+            dropout = 'Dropped'
+        else:
+            dropout = 'Active'
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=dropout,
                        href=index)
         mylist.append(an_item)
 
@@ -131,7 +136,12 @@ def platform():
 def learners():
     mylist = []
     for index, row in student_df.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
+        dropout = row['dropout_status']
+        if (int(dropout) == 1):
+            dropout = 'Dropped'
+        else:
+            dropout = 'Active'
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=dropout,
                        href=index)
         mylist.append(an_item)
 
@@ -146,9 +156,14 @@ def getUserinfo(userid=None):
     gender='Male'
     if(row['gender']=='f'):
         gender ='Female'
+    dropout = row['dropout_status']
+    if(int(dropout)==1):
+        dropout = 'Dropped'
+    else:
+        dropout = 'Active'
 
     return render_template('learner_profile.html', name=row['name'], performance=row['performance'],
-                           dropout=row['dropout_status'],
+                           dropout=dropout,
                            location=row['location'], forum_score=row['forum_score'],
                            gender=gender, year_of_birth=row['year_of_birth'],
                            level_of_education=row['level_of_education'])
@@ -171,7 +186,12 @@ def forum(courseid):
 def dropout(courseid):
     mylist = []
     for index, row in student_df[student_df['dropout_status'] == 1].iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
+        dropout = row['dropout_status']
+        if (int(dropout) == 1):
+            dropout = 'Dropped'
+        else:
+            dropout = 'Active'
+        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=dropout,
                        href=index)
         mylist.append(an_item)
     return render_template('course_dropouts.html', mylist=mylist)
