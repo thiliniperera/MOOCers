@@ -5,8 +5,8 @@
 var loadCommunityGraph = function () {
 
 
-    var width = 960,
-        height = 500,
+    var width = 700,
+        height = 400,
         radius = 10;
 
     var svg = d3.select("#network-graph").append("svg")

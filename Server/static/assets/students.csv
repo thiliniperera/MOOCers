@@ -3,12 +3,12 @@ index,name,location,performance,dropout_status,forum_score,gender,year_of_birth,
 2,Charles,United Kingdom,0.4,1,0.6,m,1986,Doctorate
 3,Sravani,Australia,0.5,0,0.8,f,1990,Masters or professional degree
 4,Amar,India,0.6,0,1,m,1988,Secondary/High School
-5,Lakshmi,India,0.5,0,0.1,m,1989,Bachelors
-6,James,Canada,0.9,0,0.2,f,1990,Secondary/High School
-7,Ronald,US,0.7,0,0.3,f,1991,Secondary/High School
+5,Lakshmi,India,0.5,0,0.1,f,1989,Bachelors
+6,James,Canada,0.3,1,0.2,m,1990,Secondary/High School
+7,Ronald,US,0.3,1,0.3,m,1991,Secondary/High School
 8,Mike,Belgium,0.8,0,0.4,m,1992,Associates
 9,Andrew,Argentina,0.4,0,0.5,m,1993,Masters or professional degree
 10,Stephen,Austria,0.7,0,0.6,m,1989,Bachelors
 11,Sara,China,0.5,1,0.7,f,1990,Bachelors
 12,JonRoot,Argentina,0.6,0,0.8,m,1991,Bachelors
-13,Ann,US,0.7,0,0.9,m,1879,Doctorate
+13,Ann,US,0.7,0,0.9,f,1879,Doctorate
