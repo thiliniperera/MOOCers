@@ -223,5 +223,5 @@ body {
     background-color: white;
     z-index: 1002;
     overflow: auto;
-    text-align: center;
+    /*text-align: center;*/
 }
