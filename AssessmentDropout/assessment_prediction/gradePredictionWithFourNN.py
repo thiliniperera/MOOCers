@@ -24,8 +24,6 @@ print y_pred
 
 
 
-
-
 accuracy = accuracy_score(y_true, y_pred , normalize=True, sample_weight=None)
 #accuracy = 2
 #print accuracy

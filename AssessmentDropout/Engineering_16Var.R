@@ -1,7 +1,7 @@
 
 #resource location
-activtyGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Education_EDUC115-S_Spring2014_ActivityGrade.csv"
-finalGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Education_EDUC115-S_Spring2014_FinalGrade.csv" 
+activtyGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Engineering_CS101_Summer2014_ActivityGrade.csv"
+finalGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Engineering_CS101_Summer2014_FinalGrade.csv" 
 
 #read file
 newTrainData <- read.csv(activtyGradeFile)
@@ -197,9 +197,9 @@ grandDataset[is.na(grandDataset)]<-0
 grandDataset <- merge(grandDataset,finalData,by="anon_screen_name.")
 
 grandDataset<-grandDataset[!(grandDataset$q1_ScaledDuration== 0 & 
-                             grandDataset$q2_ScaledDuration== 0 &
-                             grandDataset$q3_ScaledDuration== 0 &
-                             grandDataset$q4_ScaledDuration== 0),]
+                               grandDataset$q2_ScaledDuration== 0 &
+                               grandDataset$q3_ScaledDuration== 0 &
+                               grandDataset$q4_ScaledDuration== 0),]
 
 grandDataset<- unique(grandDataset)
 
@@ -257,9 +257,9 @@ gwplot(nn,selected.covariate="train$q1_grade", min=-2.5, max=5)
 
 #result
 results_grade_all <- compute(nn, covariate = matrix(c(test$q1_grade,test$q1_videoWatch ,test$q1_num_attempts , test$q1_ScaledDuration ,
-                                                        test$q2_grade, test$q2_videoWatch ,test$q2_num_attempts , test$q2_ScaledDuration  ,
-                                                        test$q3_grade, test$q3_videoWatch ,test$q3_num_attempts , test$q3_ScaledDuration , 
-                                                        test$q4_grade, test$q4_videoWatch ,test$q4_num_attempts , test$q4_ScaledDuration),byrow = TRUE,ncol = 16))
+                                                      test$q2_grade, test$q2_videoWatch ,test$q2_num_attempts , test$q2_ScaledDuration  ,
+                                                      test$q3_grade, test$q3_videoWatch ,test$q3_num_attempts , test$q3_ScaledDuration , 
+                                                      test$q4_grade, test$q4_videoWatch ,test$q4_num_attempts , test$q4_ScaledDuration),byrow = TRUE,ncol = 16))
 results_grade_all$net.result
 plot(results_grade_all$net.result)
 
@@ -276,9 +276,9 @@ written_results = read.csv("/home/chamil/Documents/work/MOOCers-master/Assessmen
 
 #Run NN to all entries
 results_grade_for_grandset <- compute(nn, covariate = matrix(c(grandDataset$q1_grade, grandDataset$q1_videoWatch ,grandDataset$q1_num_attempts , grandDataset$q1_ScaledDuration ,
-                                                      grandDataset$q2_grade, grandDataset$q2_videoWatch ,grandDataset$q2_num_attempts , grandDataset$q2_ScaledDuration  ,
-                                                      grandDataset$q3_grade, grandDataset$q3_videoWatch ,grandDataset$q3_num_attempts , grandDataset$q3_ScaledDuration , 
-                                                      grandDataset$q4_grade, grandDataset$q4_videoWatch ,grandDataset$q4_num_attempts , grandDataset$q4_ScaledDuration),byrow = TRUE,ncol = 16))
+                                                               grandDataset$q2_grade, grandDataset$q2_videoWatch ,grandDataset$q2_num_attempts , grandDataset$q2_ScaledDuration  ,
+                                                               grandDataset$q3_grade, grandDataset$q3_videoWatch ,grandDataset$q3_num_attempts , grandDataset$q3_ScaledDuration , 
+                                                               grandDataset$q4_grade, grandDataset$q4_videoWatch ,grandDataset$q4_num_attempts , grandDataset$q4_ScaledDuration),byrow = TRUE,ncol = 16))
 results_grade_for_grandset$net.result
 plot(results_grade_for_grandset$net.result)
 
