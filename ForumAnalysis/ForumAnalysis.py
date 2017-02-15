@@ -9,7 +9,7 @@ from Settings import Configurations
 
 initialFile = open(Configurations.InitialForumDataFile[0])
 
-df = pd.read_csv(initialFile,nrows =200)
+df = pd.read_csv(initialFile,nrows =500)
 uniqueUsers = df['anon_screen_name'].unique()
 print "Unique users: ",len(uniqueUsers)
 users = df['anon_screen_name'].values
@@ -81,14 +81,11 @@ for row in edge_list:
     weight = 1
     response['links'].append({'source': source, 'target': target, 'weight': weight})
 
-with open('C://xampp//htdocs//lumino//graphFile.json', 'w') as fp:
+with open('C://Users//Kushan//Documents//FYP Jan//MOOCers//Server//static//assets//nodes.json', 'w') as fp:
     json.dump(response, fp)
 
-
-
-
 scoreDF.hist()
-#plt.show()
+plt.show()
 
 
 GradesFile = open(Configurations.Grades[0])

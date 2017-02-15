@@ -6,11 +6,15 @@ Version 1.0
 
 /*Global Styles*/
 
-body {
-	background: #f5f7f9;
-	padding-top: 30px;
-	color: #5f6468;
-}
+/*body {*/
+	/*background: #f5f7f9;*/
+	/*padding-top: 30px;*/
+	/*color: #5f6468;*/
+/*}*/
+/*body {*/
+    /*padding: 30px 80px;    */
+    /*font-family: "Roboto", sans-serif;*/
+/*}*/
 
 p {
 	color: #777;

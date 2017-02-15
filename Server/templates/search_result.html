@@ -1,0 +1,20 @@
+    <table id="myTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Index</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Country</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for n in mylist %}
+        <tr>
+            <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}');">{{n.id}}</a></td>
+            <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}');">{{n.name}}</a></td>
+            <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}');">{{n.gender}}</a></td>
+            <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}');">{{n.location}}</a></td>
+        </tr>
+        {%- endfor %}
+        </tbody>
+    </table>

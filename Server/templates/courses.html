@@ -2,15 +2,18 @@
 {% block title %} Courses {% endblock %}
 {% block more_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
+<!--<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">-->
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/styles.css') }}">
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/community.css') }}">
 {% endblock %}
 {% block content %}
 
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Engineering Summer 2014</h1>
+        <h1 class="page-header">{{name}}</h1>
     </div>
 </div><!--/.row-->
 
@@ -39,7 +42,7 @@
                     </svg>
                 </div>
                 <div class="col-sm-9 col-lg-7 widget-right">
-                    <div class="large">7000</div>
+                    <div class="large">{{no_of_students}}</div>
                     <div class="text-muted">Students</div>
                 </div>
             </div>
@@ -54,7 +57,7 @@
                     </svg>
                 </div>
                 <div class="col-sm-9 col-lg-7 widget-right">
-                    <div class="large">24</div>
+                    <div class="large">{{no_of_assignments}}</div>
                     <div class="text-muted">Assignments</div>
                 </div>
             </div>
@@ -70,7 +73,7 @@
                     </svg>
                 </div>
                 <div class="col-sm-9 col-lg-7 widget-right">
-                    <div class="large">25</div>
+                    <div class="large">{{no_of_videos}}</div>
                     <div class="text-muted">Videos</div>
                 </div>
             </div>
@@ -78,9 +81,9 @@
     </div>
 </div><!--/.row-->
 <ul id="nav" class="css-tabs">
-    <li><a id="tab1" href="/csv">Tab 1</a></li>
-    <li><a id="tab2" href="/forum">Forum</a></li>
-    <li><a id="tab3" href="/csv">An ultra long third tab</a></li>
+    <li><a id="tab1" class="current" href="/forum">Forum</a></li>
+    <li><a id="tab2" href="/course/dropout">Dropouts</a></li>
+    <li><a id="tab3" href="/community">Communities</a></li>
 </ul>
 
 <!-- single pane. it is always visible -->
@@ -90,12 +93,24 @@
 {% endblock %}
 {% block more_js %}
 <script src="{{ url_for('static', filename = 'js/lumino.glyphs.js') }}"></script>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <!--forum js files-->
 <script src="{{ url_for('static', filename = 'js/fusioncharts/fusioncharts.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/fusioncharts/themes/fusioncharts.theme.fint.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/forum.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/community.js') }}"></script>
 <!--end of forum js files-->
+<!--community network js files-->
+<script type="text/javascript" src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<script type="text/javascript" src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<!--end of community network js files-->
 <script>
+
+    var course_id = 0;
+    urls =window.location.href.split('/')
+                    course_id=urls[urls.length-1]
+                    console.log(course_id)
 
     $(document).ready(function () {
         $("#nav li a").click(function () {
@@ -104,26 +119,38 @@
             $("#nav li a").removeClass('current');
             $(this).addClass('current');
 
-
             $.ajax({
-                url: this.href, success: function (html) {
+                url: this.href + "/" + course_id,
+                success: function (html) {
                     $("#ajax-content").empty().append(html);
-                 if ($("#nav li a.current").attr('id') === "tab2") {
-                     displayForumScore();
-                 }
+                    if ($("#nav li a.current").attr('id') === "tab1") {
+                        displayForumScore();
+                    }
+                    else if ($("#nav li a.current").attr('id') === "tab2") {
+                        $('#myTable').dataTable();
+                    }
+                    else if ($("#nav li a.current").attr('id') === "tab3") {
+                        loadCommunityGraph();
+                    }
+
+
+                },
+                error: function (error) {
+                    alert("error");
                 }
             });
             return false;
         });
 
         $("#ajax-content").empty();
-        $.ajax({
-            url: '/csv', success: function (html) {
-                $("#ajax-content").empty().append(html);
-                $("#nav li a").first().addClass('current');
-
-            }
-        });
+        $( ".current" ).click();
+//        $.ajax({
+//            url: '/csv/0', success: function (html) {
+//                $("#ajax-content").empty().append(html);
+//                $("#nav li a").first().addClass('current');
+//
+//            }
+//        });
     });
 
 
@@ -132,5 +159,29 @@
     $(function () {
         $('.sidebar-links > a.link-yellow').addClass('selected');
     });
+    var displayLearners = function (userID) {
+        $.ajax({
+            url: "/user_profile/" + userID, success: function (result) {
+                $('#fade').html(result);
+                document.getElementById('learner').style.display = 'block';
+                document.getElementById('fade').style.display = 'block';
+            }
+        });
+    }
+
+    function fetchJSONFile(path, callback) {
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function() {
+        console.log(httpRequest.status)
+        if (httpRequest.readyState === 4) {
+            if (httpRequest.status === 200) {
+                var data = JSON.parse(httpRequest.responseText);
+                if (callback) callback(data);
+            }
+        }
+    };
+    httpRequest.open('GET', path);
+    httpRequest.send();
+}
 </script>
 {% endblock %}
