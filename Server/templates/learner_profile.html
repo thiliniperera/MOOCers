@@ -1,6 +1,6 @@
 <div id="learner" class="white_content" style="display: block;">
     <div class="learner-name">
-        <h2 style="color: white">{{name}}</h2>
+        <h3 style="color: white">{{name}}</h3>
     </div>
     <div style="text-align: center; margin-bottom: 40px">
 
@@ -15,8 +15,10 @@
     <div>
         <p>Enrolled Courses</p>
     </div>
+
+    {% for n in course_list %}
     <div>
-        <h5 style="    background: #99b1b0;    color: aliceblue;    padding: 10px;">Engineering, Summer 2014</h5>
+        <h5 style="    background: #99b1b0;    color: aliceblue;    padding: 10px;">{{n.course_name}}</h5>
     </div>
     <div class="row" style="
     padding-left: 20px;
@@ -24,18 +26,20 @@
 ">
         <div class="course_info col-xs-12 col-md-12 col-lg-12">
 
-            <p>Predicted performance : {{performance*100}}%</p>
+            <p>Predicted performance : {{n.performance*100}}%</p>
         </div>
         <div class="course_info col-xs-12 col-md-12 col-lg-12">
 
-            <p>Forum score : {{forum_score}}</p>
+            <p>Forum score : {{n.forum_score}}</p>
         </div>
         <div class="course_info col-xs-12 col-md-12 col-lg-12">
 
-            <p>Predicted dropout status  : {{dropout}}</p>
+            <p>Predicted dropout status  : {{n.dropout}}</p>
         </div>
 
     </div>
+
+    {%- endfor %}
 
     <a href="javascript:void(0)"
        onclick="document.getElementById('learner').style.display='none';document.getElementById('fade').style.display='none'"

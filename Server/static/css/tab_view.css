@@ -93,6 +93,7 @@ ul.css-tabs a.current {
     background-image: none;
     border: 1px solid;
     border-radius: 4px;
+    overflow: hidden;
 }
 
 .learner-name.h2{
