@@ -139,7 +139,7 @@ def learners():
     for index, row in student_df.iterrows():
         dropout = row['dropout_status']
         if (int(dropout) == 1):
-            dropout = 'Dropped'
+            dropout = 'Dropout'
         else:
             dropout = 'Active'
         an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=dropout,
