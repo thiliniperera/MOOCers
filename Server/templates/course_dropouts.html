@@ -7,16 +7,16 @@
         <th>Index</th>
         <th>Name</th>
         <th>Predicted Performance</th>
-        <th>Predicted dropout probability</th>
+        <th>Predicted Dropout Status</th>
     </tr>
     </thead>
     <tbody>
     {% for n in mylist %}
     <tr>
-        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.id}}</a></td>
-        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.name}}</a></td>
-        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.grade*100}}</a></td>
-        <td><a href="javascript:void(0)" onclick="displayLearners({{n.href}})">{{n.dropout}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}')">{{n.id}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}')">{{n.name}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}')">{{n.grade*100}}</a></td>
+        <td><a href="javascript:void(0)" onclick="displayLearners('{{n.name}}')">{{n.dropout}}</a></td>
     </tr>
     {%- endfor %}
     </tbody>

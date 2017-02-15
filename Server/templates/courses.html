@@ -108,6 +108,9 @@
 <script>
 
     var course_id = 0;
+    urls =window.location.href.split('/')
+                    course_id=urls[urls.length-1]
+                    console.log(course_id)
 
     $(document).ready(function () {
         $("#nav li a").click(function () {
@@ -165,5 +168,20 @@
             }
         });
     }
+
+    function fetchJSONFile(path, callback) {
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function() {
+        console.log(httpRequest.status)
+        if (httpRequest.readyState === 4) {
+            if (httpRequest.status === 200) {
+                var data = JSON.parse(httpRequest.responseText);
+                if (callback) callback(data);
+            }
+        }
+    };
+    httpRequest.open('GET', path);
+    httpRequest.send();
+}
 </script>
 {% endblock %}

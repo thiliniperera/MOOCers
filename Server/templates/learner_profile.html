@@ -1,21 +1,51 @@
 <div id="learner" class="white_content" style="display: block;">
     <div class="learner-name">
-        <h2 style="color: white">{{name}}</h2>
+        <h3 style="color: white">{{name}}</h3>
     </div>
-    <div>
-        <h4 style="color: #989494">{{level_of_education}}</h4>
-    </div>
-    <div>
-        <h5 style="color: #989eb1">{{year_of_birth}}, {{gender}}</h5>
+    <div style="text-align: center; margin-bottom: 40px">
+
+        <div>
+            <h4 style="color: #989494">{{level_of_education}}</h4>
+        </div>
+        <div>
+            <h5 style="color: #989eb1">{{year_of_birth}}, {{gender}}</h5>
+        </div>
     </div>
     <!--<h4>{{location}}</h4>-->
-
     <div>
-        <h3>Engineering, Summer 2014</h3>
+        <p>Enrolled Courses</p>
     </div>
-    <h4>{{performance*100}}</h4>
-    <h4>{{forum_score}}</h4>
-    <h4>{{dropout_status}}</h4>
+
+    {% for n in course_list %}
+    <div>
+        <h5 style="    background: #99b1b0;    color: aliceblue;    padding: 10px;">{{n.course_name}}</h5>
+    </div>
+    <div class="row" style="
+    padding-left: 20px;
+    padding-right: 20px;
+">
+        <div class="course_info col-xs-12 col-md-12 col-lg-12">
+
+            <p>Predicted performance : {{n.performance*100}}%</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-12 col-lg-12">
+
+            <p>Forum score : {{n.forum_score}}</p>
+        </div>
+        <div class="course_info col-xs-12 col-md-12 col-lg-12">
+
+            <p>Predicted dropout status  : {{n.dropout}}</p>
+        </div>
+
+    </div>
+
+    {%- endfor %}
+
     <a href="javascript:void(0)"
-       onclick="document.getElementById('learner').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+       onclick="document.getElementById('learner').style.display='none';document.getElementById('fade').style.display='none'"
+       style="
+    position: fixed;
+    right: 450px;
+    bottom: 120px;
+">Close</a>
 </div>

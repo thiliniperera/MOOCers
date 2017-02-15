@@ -73,3 +73,30 @@ ul.css-tabs a.current {
     color: darkgoldenrod;
     padding: 20px;
 }
+
+.learner-name{
+    color: #fff;
+    background-color: #32b188;
+    border-color: #2e6da4;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.learner-name.h2{
+
+    color: #fff;
+}

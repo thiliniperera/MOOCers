@@ -22,6 +22,12 @@ student_df = pd.read_csv(student_csv)
 course_csv = 'static/assets/course.csv'
 course_df = pd.read_csv(course_csv)
 
+student_course_csv = 'static/assets/student_course.csv'
+student_course_df = pd.read_csv(student_course_csv)
+
+student_demo_csv = 'static/assets/students_demo.csv'
+student_demo_df = pd.read_csv(student_demo_csv)
+
 
 class User(flask_login.UserMixin):
     pass
@@ -73,16 +79,76 @@ def login():
 @flask_login.login_required
 def search():
     query = request.form['query']
-    search_result=student_df[student_df['name'].str.contains(pat=query,case=False)]
+    search_result = student_demo_df[student_demo_df['name'].str.contains(pat=query, case=False)]
 
     # or student_df['index'].str.contains(query)
     mylist = []
+    i=0
     for index, row in search_result.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
-                       href=index)
+        i=i+1
+        gender = 'Male'
+        if (row['gender'] == 'f'):
+            gender = 'Female'
+        an_item = dict(id=i, name=row['name'], gender=gender, location=row['country_name'])
         mylist.append(an_item)
 
     return render_template('search_result.html', mylist=mylist)
+
+@app.route('/course/dropout/<course_id>')
+@flask_login.login_required
+def dropout(course_id):
+    data = student_course_df[student_course_df['course'] == int(course_id)]
+    if(len(data)):
+        mylist = []
+        i=0
+        for index, row in data[data['dropout_status'] == 1].iterrows():
+            i=i+1
+            dropout = row['dropout_status']
+            if (int(dropout) == 1):
+                dropout = 'Dropout'
+            else:
+                dropout = 'Active'
+            an_item = dict(id=i, name=row['name'], grade=row['performance'], dropout=dropout)
+            mylist.append(an_item)
+        return render_template('course_dropouts.html', mylist=mylist)
+    else:
+        return "No students are going to drop out the course"
+
+
+@app.route('/user_profile/<username>')
+@flask_login.login_required
+def getUserinfo(username=None):
+    # print df.irow(userid)
+    # row = student_df.irow(username)
+    data = student_demo_df[student_demo_df['name'] == username]
+
+    if (len(data) > 0):
+        row = data.irow(0)
+        gender = 'Male'
+        if (row['gender'] == 'f'):
+            gender = 'Female'
+
+        course_data_list = []
+        predicted_data = student_course_df[student_course_df['name'] == username]
+        if (len(predicted_data) > 0):
+            for index, course_row in predicted_data.iterrows():
+                dropout = course_row['dropout_status']
+                if (int(dropout) == 1):
+                    dropout = 'Dropout'
+                else:
+                    dropout = 'Active'
+
+                an_item = dict(performance=course_row['performance'], dropout=dropout,
+                               forum_score=course_row['forum_score'],
+                               course_name=course_df.irow(int(course_row['course']))['name'])
+                course_data_list.append(an_item)
+
+        return render_template('learner_profile.html', name=row['name'], gender=gender,
+                               location=row['country_name'],
+                               year_of_birth=row['year_of_birth'],
+                               level_of_education=row['level_of_education'], course_list=course_data_list)
+    else:
+        json.dumps({'success': False}), 404, {'ContentType': 'application/json'}
 
 
 @app.route('/logout')
@@ -104,7 +170,7 @@ def courses(course_id=None):
     row = course_df.irow(course_id)
     course_name = str(row['name']) + " , " + row['term'] + " " + str(parse(str(row['starting_date'])).year)
     return render_template('courses.html', no_of_students=row['no_of_students'], no_of_videos=row['no_of_videos'],
-                           no_of_assignments=row['no_of_assignments'],name = course_name)
+                           no_of_assignments=row['no_of_assignments'], name=course_name)
 
 
 @app.route('/')
@@ -129,29 +195,7 @@ def platform():
 @app.route('/learners')
 @flask_login.login_required
 def learners():
-    mylist = []
-    for index, row in student_df.iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
-                       href=index)
-        mylist.append(an_item)
-
-    return render_template('learners.html', mylist=mylist)
-
-
-@app.route('/user_profile/<userid>')
-@flask_login.login_required
-def getUserinfo(userid=None):
-    # print df.irow(userid)
-    row = student_df.irow(userid)
-    gender='Male'
-    if(row['gender']=='f'):
-        gender ='Female'
-
-    return render_template('learner_profile.html', name=row['name'], performance=row['performance'],
-                           dropout=row['dropout_status'],
-                           location=row['location'], forum_score=row['forum_score'],
-                           gender=gender, year_of_birth=row['year_of_birth'],
-                           level_of_education=row['level_of_education'])
+    return render_template('learners.html')
 
 
 @app.route('/csv/<course_id>')
@@ -166,16 +210,6 @@ def forum(courseid):
     return render_template('forum.html')
 
 
-@app.route('/course/dropout/<courseid>')
-@flask_login.login_required
-def dropout(courseid):
-    mylist = []
-    for index, row in student_df[student_df['dropout_status'] == 1].iterrows():
-        an_item = dict(id=row['index'], name=row['name'], grade=row['performance'], dropout=row['dropout_status'],
-                       href=index)
-        mylist.append(an_item)
-    return render_template('course_dropouts.html', mylist=mylist)
-
 
 @app.route('/json/<path:path>')
 @flask_login.login_required
@@ -185,7 +219,7 @@ def send_json(path):
 
 @app.route('/community/<courseid>')
 @flask_login.login_required
-def community(courseid):
+def community(courseid=None):
     return render_template('community.html')
 
 

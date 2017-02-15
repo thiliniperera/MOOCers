@@ -8,7 +8,7 @@
 
 {% endblock %}
 {% block content %}
-<div class="container">
+<div>
     <div class="row header" style="text-align:center">
         <h1>Learner Personas</h1>
     </div>
@@ -83,7 +83,7 @@
                 $("#ajax-search-result").empty().append(data).css('visibility', 'visible');
 //                $('#myTable').dataTable();
                 var table = $('#myTable').DataTable({
-                   "dom": '<"top"i>rt<"bottom"lp><"clear">'
+                    "dom": '<"top"i>rt<"bottom"lp><"clear">'
 
                 });
             }

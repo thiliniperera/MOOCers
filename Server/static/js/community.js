@@ -4,9 +4,8 @@
 
 var loadCommunityGraph = function () {
 
-
-    var width = 960,
-        height = 500,
+    var width = 700,
+        height = 400,
         radius = 10;
 
     var svg = d3.select("#network-graph").append("svg")
@@ -28,7 +27,7 @@ var loadCommunityGraph = function () {
         .size([width, height]);
 
 
-    d3.json('/json/assets/nodes_' + course_id + '.json', function (json) {
+    d3.json('/json/assets/nodes_' + course_id + '.json?_=' + new Date().getDate(), function (json) {
         force
             .nodes(json.nodes)
             .links(json.links)
