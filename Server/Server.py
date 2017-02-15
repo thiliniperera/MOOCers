@@ -195,7 +195,11 @@ def platform():
 @app.route('/learners')
 @flask_login.login_required
 def learners():
-    return render_template('learners.html')
+    no_of_records = len(student_course_df)
+    no_of_isolated_students = len(student_course_df[student_course_df['forum_score']<0.2])
+    no_of_at_rik_students = len(student_course_df[student_course_df['dropout_status']==1])
+    return render_template('learners.html', total =no_of_records, current_students = no_of_records,
+                           no_of_isolated_students=no_of_isolated_students, no_of_at_rik_students=no_of_at_rik_students)
 
 
 @app.route('/csv/<course_id>')

@@ -1,19 +1,19 @@
 <div id="learner" class="white_content" style="display: block;">
     <div class="learner-name">
         <h3 style="color: white">{{name}}</h3>
-    </div>
-    <div style="text-align: center; margin-bottom: 40px">
 
         <div>
-            <h4 style="color: #989494">{{level_of_education}}</h4>
+            <h5 style="color: #f3f5f9">{{year_of_birth}}, {{gender}}</h5>
         </div>
-        <div>
-            <h5 style="color: #989eb1">{{year_of_birth}}, {{gender}}</h5>
-        </div>
+    </div>
+    <div style="text-align: center; margin-bottom: 40px">
+            <h5 style="color: #989494"><i class="fa fa-graduation-cap" aria-hidden="true"></i>  {{level_of_education}}</h5>
+            <h5 style="color: #989494"><i class="fa fa-globe" aria-hidden="true"></i>  {{location}}</h5>
+
     </div>
     <!--<h4>{{location}}</h4>-->
     <div>
-        <p>Enrolled Courses</p>
+        <b><p>Enrolled Courses</p></b>
     </div>
 
     {% for n in course_list %}
@@ -26,15 +26,15 @@
 ">
         <div class="course_info col-xs-12 col-md-12 col-lg-12">
 
-            <p>Predicted performance : {{n.performance*100}}%</p>
+            <p data-toggle="tooltip" data-placement="top" title="A value between 0 and 100.">Predicted performance : {{n.performance*100}}%</p>
         </div>
         <div class="course_info col-xs-12 col-md-12 col-lg-12">
 
-            <p>Forum score : {{n.forum_score}}</p>
+            <p data-toggle="tooltip" data-placement="top" title="A calculated score between 0 and 1 , to indicate learner forum interaction ">Forum score : {{n.forum_score}}</p>
         </div>
         <div class="course_info col-xs-12 col-md-12 col-lg-12">
 
-            <p>Predicted dropout status  : {{n.dropout}}</p>
+            <p data-toggle="tooltip" data-placement="top" title="Has been predicted by analysing learner interaction with the course materials and quiz performance">Predicted dropout status  : {{n.dropout}}</p>
         </div>
 
     </div>

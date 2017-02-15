@@ -108,9 +108,9 @@
 <script>
 
     var course_id = 0;
-    urls =window.location.href.split('/')
-                    course_id=urls[urls.length-1]
-                    console.log(course_id)
+    urls = window.location.href.split('/')
+    course_id = urls[urls.length - 1]
+    console.log(course_id)
 
     $(document).ready(function () {
         $("#nav li a").click(function () {
@@ -143,7 +143,7 @@
         });
 
         $("#ajax-content").empty();
-        $( ".current" ).click();
+        $(".current").click();
 //        $.ajax({
 //            url: '/csv/0', success: function (html) {
 //                $("#ajax-content").empty().append(html);
@@ -159,6 +159,10 @@
     $(function () {
         $('.sidebar-links > a.link-yellow').addClass('selected');
     });
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
     var displayLearners = function (userID) {
         $.ajax({
             url: "/user_profile/" + userID, success: function (result) {
@@ -170,18 +174,18 @@
     }
 
     function fetchJSONFile(path, callback) {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function() {
-        console.log(httpRequest.status)
-        if (httpRequest.readyState === 4) {
-            if (httpRequest.status === 200) {
-                var data = JSON.parse(httpRequest.responseText);
-                if (callback) callback(data);
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function () {
+            console.log(httpRequest.status)
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    var data = JSON.parse(httpRequest.responseText);
+                    if (callback) callback(data);
+                }
             }
-        }
-    };
-    httpRequest.open('GET', path);
-    httpRequest.send();
-}
+        };
+        httpRequest.open('GET', path);
+        httpRequest.send();
+    }
 </script>
 {% endblock %}
