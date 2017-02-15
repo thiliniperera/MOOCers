@@ -4,7 +4,6 @@
 
 var loadCommunityGraph = function () {
 
-
     var width = 700,
         height = 400,
         radius = 10;
@@ -28,7 +27,7 @@ var loadCommunityGraph = function () {
         .size([width, height]);
 
 
-    d3.json('/json/assets/nodes_' + course_id + '.json', function (json) {
+    d3.json('/json/assets/nodes_' + course_id + '.json?_=' + new Date().getDate(), function (json) {
         force
             .nodes(json.nodes)
             .links(json.links)

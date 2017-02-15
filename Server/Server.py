@@ -22,7 +22,8 @@ student_df = pd.read_csv(student_csv)
 course_csv = 'static/assets/course.csv'
 course_df = pd.read_csv(course_csv)
 
-
+student_course_csv = 'static/assets/student_course.csv'
+student_course_df = pd.read_csv(student_course_csv)
 class User(flask_login.UserMixin):
     pass
 
@@ -205,7 +206,7 @@ def send_json(path):
 
 @app.route('/community/<courseid>')
 @flask_login.login_required
-def community(courseid):
+def community(courseid=None):
     return render_template('community.html')
 
 
