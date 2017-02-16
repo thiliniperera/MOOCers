@@ -36,8 +36,8 @@ students_demo = students_demo.append(student_demo2 )
 
 g = hum_df.groupby('anon_screen_name')
 
-df=g.count()
-print  df
-# print("Writing csv......")
-# w = ('static/assets/students_demo.csv')
-# students_demo.to_csv(w, index=False)
+# df=g.count()
+# print  df
+print("Writing csv......")
+w = ('static/assets/students_demo.csv')
+students_demo.to_csv(w, index=False)

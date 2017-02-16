@@ -1,6 +1,7 @@
 {% extends "base_platform.html" %}
 {% block title %} Courses {% endblock %}
 {% block more_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/spin.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/tab_view.css') }}">
 <!--<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">-->
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/styles.css') }}">
@@ -115,7 +116,7 @@
     $(document).ready(function () {
         $("#nav li a").click(function () {
 
-            $("#ajax-content").empty();
+            $("#ajax-content").empty().append('<div class="uil-spin-css" style="-webkit-transform:scale(0.32)"><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div>');
             $("#nav li a").removeClass('current');
             $(this).addClass('current');
 
