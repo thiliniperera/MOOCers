@@ -22,7 +22,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>Students in ongoing courses : {{current_students}}</h4>
-                    <div class="easypiechart" id="easypiechart-blue" data-percent="{{current_students*100/total}}"><span class="percent">{{current_students*100/total}}%</span>
+                    <div class="easypiechart" id="easypiechart-blue" data-percent="{{current_students*100/total}}"><span class="percent">{{'%0.2f'| format(current_students*100/total|float)}}%</span>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4 data-toggle="tooltip" data-placement="top" title="Isolated students from the forum. Calculated with the forum score.">Isolated Students : {{no_of_isolated_students}}</h4>
-                    <div class="easypiechart" id="easypiechart-teal" data-percent="{{no_of_isolated_students*100/current_students}}"><span class="percent">{{no_of_isolated_students*100/current_students}}%</span>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="{{no_of_isolated_students*100/current_students}}"><span class="percent">{{'%0.2f'| format(no_of_isolated_students*100/current_students|float)}}%</span>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4 data-toggle="tooltip" data-placement="top" title="Likely to dropout the course">Students at Risk : {{no_of_at_rik_students}}</h4>
-                    <div class="easypiechart" id="easypiechart-red" data-percent="{{no_of_at_rik_students*100/current_students}}"><span class="percent">{{no_of_at_rik_students*100/current_students}}%</span>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="{{no_of_at_rik_students*100/current_students}}"><span class="percent">{{'%0.2f'| format(no_of_at_rik_students*100/current_students|float)}}%</span>
                     </div>
                 </div>
             </div>

@@ -28,6 +28,12 @@ student_course_df = pd.read_csv(student_course_csv)
 student_demo_csv = 'static/assets/students_demo.csv'
 student_demo_df = pd.read_csv(student_demo_csv)
 
+dropout0_csv = 'static/assets/dropout0.csv'
+dropout0_df = pd.read_csv(dropout0_csv)
+
+
+dropout1_csv = 'static/assets/dropout1.csv'
+dropout1_df = pd.read_csv(dropout1_csv)
 
 class User(flask_login.UserMixin):
     pass
@@ -98,23 +104,38 @@ def search():
 @app.route('/course/dropout/<course_id>')
 @flask_login.login_required
 def dropout(course_id):
-    data = student_course_df[student_course_df['course'] == int(course_id)]
+    # data = student_course_df[student_course_df['course'] == int(course_id)]
+    # if (len(data)):
+    #     mylist = []
+    #     i = 0
+    #     for index, row in data[data['dropout_status'] == 1].iterrows():
+    #         i = i + 1
+    #         dropout = row['dropout_status']
+    #         if (int(dropout) == 1):
+    #             dropout = 'Dropout'
+    #         else:
+    #             dropout = 'Active'
+    #         an_item = dict(id=i, name=row['name'], grade=row['performance'], dropout=dropout)
+    #         mylist.append(an_item)
+    #     return render_template('course_dropouts.html', mylist=mylist)
+    # else:
+    #     return "No students are going to drop out the course"
+
+    if(int(course_id)==0):
+        data=dropout0_df
+    else:
+        data = dropout1_df
     if (len(data)):
         mylist = []
         i = 0
-        for index, row in data[data['dropout_status'] == 1].iterrows():
+        for index, row in data.iterrows():
             i = i + 1
-            dropout = row['dropout_status']
-            if (int(dropout) == 1):
-                dropout = 'Dropout'
-            else:
-                dropout = 'Active'
+            dropout = 'Dropout'
             an_item = dict(id=i, name=row['name'], grade=row['performance'], dropout=dropout)
             mylist.append(an_item)
         return render_template('course_dropouts.html', mylist=mylist)
     else:
         return "No students are going to drop out the course"
-
 
 @app.route('/user_profile/<username>')
 @flask_login.login_required

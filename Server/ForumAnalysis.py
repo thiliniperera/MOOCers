@@ -34,10 +34,23 @@ i4 = hum_df.set_index(keys4).index
 student_demo2 = hum_df[i4.isin(i3)]
 students_demo = students_demo.append(student_demo2 )
 
-g = hum_df.groupby('anon_screen_name')
+# g = hum_df.groupby('anon_screen_name')
 
 # df=g.count()
 # print  df
 print("Writing csv......")
-w = ('static/assets/students_demo.csv')
-students_demo.to_csv(w, index=False)
+# w = ('static/assets/students_demo.csv')
+# students_demo.to_csv(w, index=False)
+
+
+
+data = student_course_df[student_course_df['course'] == 0]
+data1 = data[data['dropout_status'] == 1]
+w = ('static/assets/dropout0.csv')
+data1.to_csv(w, index=False)
+
+
+data = student_course_df[student_course_df['course'] == 1]
+data1 = data[data['dropout_status'] == 1]
+w = ('static/assets/dropout1.csv')
+data1.to_csv(w, index=False)
