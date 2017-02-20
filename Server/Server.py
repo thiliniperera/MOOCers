@@ -28,6 +28,12 @@ student_course_df = pd.read_csv(student_course_csv)
 student_demo_csv = 'static/assets/students_demo.csv'
 student_demo_df = pd.read_csv(student_demo_csv)
 
+dropout0_csv = 'static/assets/dropout0.csv'
+dropout0_df = pd.read_csv(dropout0_csv)
+
+
+dropout1_csv = 'static/assets/dropout1.csv'
+dropout1_df = pd.read_csv(dropout1_csv)
 
 class User(flask_login.UserMixin):
     pass
@@ -83,9 +89,9 @@ def search():
 
     # or student_df['index'].str.contains(query)
     mylist = []
-    i=0
+    i = 0
     for index, row in search_result.iterrows():
-        i=i+1
+        i = i + 1
         gender = 'Male'
         if (row['gender'] == 'f'):
             gender = 'Female'
@@ -94,26 +100,42 @@ def search():
 
     return render_template('search_result.html', mylist=mylist)
 
+
 @app.route('/course/dropout/<course_id>')
 @flask_login.login_required
 def dropout(course_id):
-    data = student_course_df[student_course_df['course'] == int(course_id)]
-    if(len(data)):
+    # data = student_course_df[student_course_df['course'] == int(course_id)]
+    # if (len(data)):
+    #     mylist = []
+    #     i = 0
+    #     for index, row in data[data['dropout_status'] == 1].iterrows():
+    #         i = i + 1
+    #         dropout = row['dropout_status']
+    #         if (int(dropout) == 1):
+    #             dropout = 'Dropout'
+    #         else:
+    #             dropout = 'Active'
+    #         an_item = dict(id=i, name=row['name'], grade=row['performance'], dropout=dropout)
+    #         mylist.append(an_item)
+    #     return render_template('course_dropouts.html', mylist=mylist)
+    # else:
+    #     return "No students are going to drop out the course"
+
+    if(int(course_id)==0):
+        data=dropout0_df
+    else:
+        data = dropout1_df
+    if (len(data)):
         mylist = []
-        i=0
-        for index, row in data[data['dropout_status'] == 1].iterrows():
-            i=i+1
-            dropout = row['dropout_status']
-            if (int(dropout) == 1):
-                dropout = 'Dropout'
-            else:
-                dropout = 'Active'
+        i = 0
+        for index, row in data.iterrows():
+            i = i + 1
+            dropout = 'Dropout'
             an_item = dict(id=i, name=row['name'], grade=row['performance'], dropout=dropout)
             mylist.append(an_item)
         return render_template('course_dropouts.html', mylist=mylist)
     else:
         return "No students are going to drop out the course"
-
 
 @app.route('/user_profile/<username>')
 @flask_login.login_required
@@ -176,8 +198,9 @@ def courses(course_id=None):
 @app.route('/')
 @flask_login.login_required
 def platform():
-    # name, term, starting_date, ending_date, no_of_students, no_of_videos, no_of_assignments
     mylist = []
+    completed_percentage = [55, 48, 50]  # need to calculated from start date and end date in a real implementation
+    i = 0
     for index, row in course_df.iterrows():
         course_name = str(row['name']) + " , " + row['term'] + " " + str(parse(str(row['starting_date'])).year)
         an_item = dict(id=index, starting_date=row['starting_date'],
@@ -186,16 +209,22 @@ def platform():
                        no_of_videos=row['no_of_videos'],
                        no_of_assignments=row['no_of_assignments'],
                        name=course_name,
-                       students_at_risk=350
+                       students_at_risk=row['at_risk'],
+                       completed_percentage=completed_percentage[i]
                        )
         mylist.append(an_item)
+        i = i + 1
     return render_template('platform.html', course_list=mylist)
 
 
 @app.route('/learners')
 @flask_login.login_required
 def learners():
-    return render_template('learners.html')
+    no_of_records = len(student_course_df)
+    no_of_isolated_students = len(student_course_df[student_course_df['forum_score'] < 0.2])
+    no_of_at_rik_students = len(student_course_df[student_course_df['dropout_status'] == 1])
+    return render_template('learners.html', total=no_of_records, current_students=no_of_records,
+                           no_of_isolated_students=no_of_isolated_students, no_of_at_rik_students=no_of_at_rik_students)
 
 
 @app.route('/csv/<course_id>')
@@ -208,7 +237,6 @@ def readDF(course_id=0):
 @flask_login.login_required
 def forum(courseid):
     return render_template('forum.html')
-
 
 
 @app.route('/json/<path:path>')

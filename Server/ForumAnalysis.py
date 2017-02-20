@@ -1,76 +1,56 @@
-from __future__ import division
+
 import pandas as pd
-import numpy as np
-import igraph
-import matplotlib.pyplot as plt
 
-from Settings import Configurations
+student_course_csv = 'static/assets/student_course.csv'
+student_course_df = pd.read_csv(student_course_csv)
 
-initialFile = open(Configurations.InitialForumDataFile[0])
+eng_csv = 'static/assets/eng.csv'
+eng_df = pd.read_csv(eng_csv)
 
-df = pd.read_csv(initialFile, nrows=500)
-uniqueUsers = df['anon_screen_name'].unique()
-users = df['anon_screen_name'].values
-uniqueCommentThreadIDs =  df[df['type'] == 'CommentThread']['forum_post_id'].unique()
+hum_csv = 'static/assets/hum.csv'
+hum_df = pd.read_csv(hum_csv)
 
-commentThreadIDs = df['forum_post_id'].where(df['type'] == 'CommentThread', df['comment_thread_id']).values
+course_1 = student_course_df[student_course_df['course']==0]
 
-# df['forum_id'] = commentThreadIDs
-xDim= len(uniqueUsers)
-yDim= len(uniqueCommentThreadIDs)
-totalLoops = xDim*yDim
-print xDim
-print yDim
-print len(commentThreadIDs)
+keys = course_1['name']
+i1 = course_1.set_index(keys).index
 
-initialArray = [[0 for x in range(len(uniqueCommentThreadIDs))] for y in range(len(uniqueUsers))]
-
-for i in range(len(uniqueUsers)):
-    for j in range(len(uniqueCommentThreadIDs)):
-        involvement = 0
-        for k in range(len(commentThreadIDs)):
-            if(uniqueUsers[i]==users[k] and uniqueCommentThreadIDs[j]==commentThreadIDs[k]):
-                involvement=involvement+1
-
-        #initialArray[i][j]=involvement if involvement < 3 else min(2, involvement)
-        initialArray[i][j]=1 if involvement >0 else 0
-        #print (i*yDim+j)*100/totalLoops
+keys2 = eng_df['anon_screen_name']
+i2 = eng_df.set_index(keys2).index
 
 
+# print course_1['name']
+students_demo= eng_df[i2.isin(i1)]
+course_2 = student_course_df[student_course_df['course']==1]
 
-initialMatrix= np.asmatrix(initialArray)
-adjMatrix = initialMatrix.dot(initialMatrix.T)
-print initialMatrix.shape
-print initialMatrix
-print adjMatrix.shape
-print adjMatrix
+keys3 = course_2['name']
+i3 = course_2.set_index(keys3).index
 
-
-adjMatrixDF = pd.DataFrame(data=adjMatrix, index=uniqueUsers,           columns=uniqueUsers)
-A = adjMatrixDF.values
-print("*****")
-sum = np.sum(A,axis=1)
-max = np.max(sum)
-min = np.min(sum)
-sum = (sum-min)/(max-min)
-sumDF = pd.DataFrame(data=sum)
+keys4 = hum_df['anon_screen_name']
+i4 = hum_df.set_index(keys4).index
 
 
-sumDF.hist()
-plt.show()
+# print course_1['name']
+student_demo2 = hum_df[i4.isin(i3)]
+students_demo = students_demo.append(student_demo2 )
 
-print(A)
+# g = hum_df.groupby('anon_screen_name')
 
-exit()
+# df=g.count()
+# print  df
+print("Writing csv......")
+# w = ('static/assets/students_demo.csv')
+# students_demo.to_csv(w, index=False)
 
 
 
-
-g = igraph.Graph.Adjacency((A > 0).tolist())
-
-# Add edge weights and node labels.
-g.es['weight'] = A[A.nonzero()]
-#g.vs['label'] = uniqueUsers  # or a.index/a.columns
+data = student_course_df[student_course_df['course'] == 0]
+data1 = data[data['dropout_status'] == 1]
+w = ('static/assets/dropout0.csv')
+data1.to_csv(w, index=False)
 
 
-igraph.plot(g)
+data = student_course_df[student_course_df['course'] == 1]
+data1 = data[data['dropout_status'] == 1]
+w = ('static/assets/dropout1.csv')
+data1.to_csv(w, index=False)

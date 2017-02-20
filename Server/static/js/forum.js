@@ -4,7 +4,7 @@
 
 
 var displayForumScore = function () {
-    fetchJSONFile('/json/assets/nodes_'+course_id+'.json?_=' + new Date().getDate(), function (data) {
+    fetchJSONFile('/json/assets/nodes_'+course_id+'.json?_=' + new Date().getTime(), function (data) {
 
         var items = new Array(10).fill(1);
         for (i = 0; i < data.nodes.length; i++) {

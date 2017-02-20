@@ -1,6 +1,11 @@
+
+#resource location
+activtyGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Education_EDUC115-S_Spring2014_ActivityGrade.csv"
+finalGradeFile <- "/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/EDUC115/Education_EDUC115-S_Spring2014_FinalGrade.csv" 
+
 #read file
-newTrainData <- read.csv("E:/My Documents/1.ENGI/Semester 8/FYP/EDUC115/Education_EDUC115-S_Spring2014_ActivityGrade.csv")
-finalData <- read.csv("E:/My Documents/1.ENGI/Semester 8/FYP/EDUC115/Education_EDUC115-S_Spring2014_FinalGrade.csv")
+newTrainData <- read.csv(activtyGradeFile)
+finalData <- read.csv(finalGradeFile)
 summary(newTrainData)
 
 #Calculate duration
@@ -175,6 +180,7 @@ half <- round(nrow(result_table_total)/2)
 train_result <- result_table_total[1:half,]
 summary(train_result)
 test_result <- result_table_total[nrow(result_table_total)- half:nrow(result_table_total),]
+test_result
 
 library(neuralnet)
 result_nn=neuralnet(train_result$actual~train_result$prediction_Q1+train_result$prediction_Q2+train_result$prediction_Q3+train_result$prediction_Q4,train_result,hidden=2,err.fct = "sse",linear.output = FALSE)
@@ -187,11 +193,50 @@ results_grade_all <- compute(result_nn, covariate = matrix(c(test_result$predict
 results_grade_all$net.result
 plot(results_grade4$net.result)
 
+#Add prediction column to result set
+prediction <- c(results_grade_all$net.result)
+test_result_2 <-test_result
+test_result_2$prediction <- prediction
+
+#accuracy
+
+
+# Write CSV in R
+write.csv(test_result_2, file = "//home/chamil/Documents/work/MOOCers-master/AssessmentDropout/MyData.csv")
+
+#read results
+written_results = read.csv("/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/MyData.csv")
 
 #Calculate Error
 predict_nn <- results_grade_all$net.result*(max(result_table_total$actual)-min(result_table_total$actual))+min(result_table_total$actual)
 predict_nn
 test_results <- test_result$actual*(max(result_table_total$actual)-min(result_table_total$actual))+min(result_table_total$actual)
+test_results
+
+MSE <- sum((test_results - predict_nn)^2)/nrow(test_result)
+MSE
+
+
+#test for full processed data set
+results_grade_total <- compute(result_nn, covariate = matrix(c(result_table_total$prediction_Q1,result_table_total$prediction_Q2,result_table_total$prediction_Q3,result_table_total$prediction_Q4),byrow = TRUE,ncol = 4))
+results_grade_total$net.result
+plot(results_grade_total$net.result)
+
+prediction <- c(results_grade_total$net.result)
+result_table_total_2 <-result_table_total
+result_table_total_2$prediction <- prediction
+
+# Write CSV in R
+write.csv(result_table_total_2, file = "//home/chamil/Documents/work/MOOCers-master/AssessmentDropout/MyData_with44_predic.csv")
+
+#read results
+written_results = read.csv("/home/chamil/Documents/work/MOOCers-master/AssessmentDropout/MyData_with44_predic.csv")
+
+
+#Calculate Error
+predict_nn <- results_grade_total$net.result*(max(result_table_total$actual)-min(result_table_total$actual))+min(result_table_total$actual)
+predict_nn
+test_results <- result_table_total$actual*(max(result_table_total$actual)-min(result_table_total$actual))+min(result_table_total$actual)
 test_results
 
 MSE <- sum((test_results - predict_nn)^2)/nrow(test_result)
