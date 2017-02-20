@@ -45,3 +45,11 @@ Total Events:  97611
 Total unique users:  14069
 after preprocessing - 3758
 
+
+Humanities
+---------
+
+Week 2
+
+i4x-HumanitiesandScience-StatLearning-video-7f4d486e31594b1096e1c58801b5177b
+
